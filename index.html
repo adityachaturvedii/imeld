@@ -895,14 +895,15 @@
             <h2>8. Clinical Scores vs Machine Learning Models</h2>
 
             <div class="key-finding">
-                <h3>Superior ML Performance</h3>
-                <p>Machine learning models significantly outperform traditional clinical scores for FLD detection:</p>
+                <h3>Superior ML Performance - Verified Results</h3>
+                <p>Machine learning models demonstrate excellent performance for FLD detection:</p>
                 <ul style="margin-left: 20px;">
-                    <li><strong>Best ML Model (Full RF):</strong> AUC 0.789</li>
-                    <li><strong>Best Non-Invasive ML:</strong> AUC 0.785</li>
-                    <li><strong>Best Clinical Score (FIB-4):</strong> AUC 0.564</li>
-                    <li><strong>Performance Gain:</strong> +40% improvement in AUC</li>
+                    <li><strong>Best Non-Invasive ML (RF):</strong> AUC 0.792 ✓</li>
+                    <li><strong>Non-Invasive LR:</strong> AUC 0.788 ✓</li>
+                    <li><strong>Full Model (RF):</strong> AUC 0.789</li>
                 </ul>
+                <p style="margin-top: 10px; color: #dc2626; font-weight: bold;">⚠️ Clinical scores (APRI, FIB-4, AGILE-3+) cannot be fairly compared as they target FIBROSIS, not steatosis. Their poor performance (AUC 0.45-0.55) is expected when misused for FLD detection.</p>
+                <p style="margin-top: 10px; font-style: italic;">✓ Verified: ML models use no blood tests in non-invasive version. Dataset: "imeld 01072025 final freeze.xlsx" (3,171 participants)</p>
             </div>
 
             <h3>8.1 Comprehensive Performance Comparison</h3>
@@ -934,11 +935,11 @@
                         <td>Non-Invasive RF</td>
                         <td>ML Model</td>
                         <td style="color: #22c55e; font-weight: bold;">No</td>
-                        <td>52.8</td>
-                        <td>86.3</td>
-                        <td>67.9</td>
-                        <td>76.9</td>
-                        <td>0.785</td>
+                        <td>57.6</td>
+                        <td>84.4</td>
+                        <td>66.8</td>
+                        <td>78.5</td>
+                        <td>0.792</td>
                     </tr>
                     <tr>
                         <td>Full LR</td>
@@ -954,44 +955,58 @@
                         <td>Non-Invasive LR</td>
                         <td>ML Model</td>
                         <td style="color: #22c55e; font-weight: bold;">No</td>
-                        <td>48.1</td>
-                        <td>86.8</td>
+                        <td>53.6</td>
+                        <td>85.4</td>
                         <td>66.7</td>
-                        <td>75.3</td>
-                        <td>0.777</td>
+                        <td>77.1</td>
+                        <td>0.788</td>
                     </tr>
                     <tr style="background: #fee2e2;">
-                        <td>FIB-4</td>
-                        <td>Clinical Score</td>
-                        <td>Yes</td>
-                        <td>48.6</td>
-                        <td>61.1</td>
-                        <td>40.9</td>
-                        <td>68.3</td>
-                        <td>0.564</td>
+                        <td>FAST*</td>
+                        <td>Clinical Score (NASH)</td>
+                        <td>Yes + FibroScan</td>
+                        <td>3.1</td>
+                        <td>99.9</td>
+                        <td>97.1</td>
+                        <td>65.3</td>
+                        <td>0.721</td>
                     </tr>
                     <tr style="background: #fee2e2;">
-                        <td>APRI</td>
-                        <td>Clinical Score</td>
+                        <td>FIB-4*</td>
+                        <td>Clinical Score (Fibrosis)</td>
                         <td>Yes</td>
+                        <td>46.6</td>
+                        <td>60.2</td>
+                        <td>39.0</td>
+                        <td>67.3</td>
+                        <td>0.552</td>
+                    </tr>
+                    <tr style="background: #fee2e2;">
+                        <td>APRI*</td>
+                        <td>Clinical Score (Fibrosis)</td>
+                        <td>Yes</td>
+                        <td>26.8</td>
+                        <td>76.9</td>
+                        <td>38.8</td>
+                        <td>65.7</td>
+                        <td>0.531</td>
+                    </tr>
+                    <tr style="background: #fee2e2;">
+                        <td>AGILE-3+*</td>
+                        <td>Clinical Score (Fibrosis)</td>
+                        <td>Yes</td>
+                        <td>0.0</td>
                         <td>100.0</td>
                         <td>0.0</td>
-                        <td>35.6</td>
-                        <td>0.0</td>
-                        <td>0.561</td>
-                    </tr>
-                    <tr style="background: #fee2e2;">
-                        <td>AGILE-3+</td>
-                        <td>Clinical Score</td>
-                        <td>Yes</td>
-                        <td>0.0</td>
-                        <td>100.0</td>
-                        <td>0.0</td>
-                        <td>64.4</td>
-                        <td>0.449</td>
+                        <td>64.6</td>
+                        <td>0.453</td>
                     </tr>
                 </tbody>
             </table>
+            <p style="font-size: 12px; margin-top: 10px; font-style: italic;">
+                * These scores are NOT designed for FLD detection. They target different conditions (fibrosis/NASH).
+                Poor performance is expected and represents inappropriate off-label use.
+            </p>
 
             <div class="chart-container">
                 <div class="chart-title">Figure 7: ROC Curves - ML Models vs Clinical Scores</div>
@@ -1108,15 +1123,16 @@
                 </tbody>
             </table>
 
-            <div class="warning-box">
-                <h3>Clinical Scores Limitations</h3>
-                <p>Traditional clinical scores (APRI, FIB-4, AGILE-3+) were developed for fibrosis assessment, not FLD detection:</p>
+            <div class="warning-box" style="border: 3px solid #dc2626; background: #fee2e2;">
+                <h3>⚠️ CRITICAL DISCLAIMER - Clinical Scores</h3>
+                <p><strong>IMPORTANT:</strong> The clinical scores shown (APRI, FIB-4, AGILE-3+, FAST) were NOT designed for FLD/steatosis detection:</p>
                 <ul style="margin-left: 20px;">
-                    <li><strong>APRI:</strong> 100% sensitivity but 0% specificity - labels everyone as positive</li>
-                    <li><strong>FIB-4:</strong> Best clinical score but AUC only 0.564</li>
-                    <li><strong>AGILE-3+:</strong> 100% specificity but 0% sensitivity - labels everyone as negative</li>
+                    <li><strong>APRI, FIB-4, AGILE-3+:</strong> Designed for FIBROSIS staging, not steatosis</li>
+                    <li><strong>FAST:</strong> Designed for NASH with activity and fibrosis, not simple FLD</li>
+                    <li><strong>OFF-LABEL USE:</strong> Using these scores for FLD is inappropriate</li>
+                    <li><strong>Poor Performance Expected:</strong> AUCs of 0.45-0.55 reflect wrong target condition</li>
                 </ul>
-                <p><strong>Conclusion:</strong> ML models are essential for accurate FLD screening</p>
+                <p style="color: #dc2626; font-weight: bold;">These scores should NOT be used for FLD screening. They measure different pathological processes (fibrosis vs steatosis). The comparison is shown for completeness but represents OFF-LABEL use.</p>
             </div>
         </section>
 
@@ -1566,9 +1582,18 @@
                         tension: 0.4
                     },
                     {
-                        label: 'Non-Invasive RF (AUC=0.785)',
-                        data: generateROCPoints(0.785),
+                        label: 'Non-Invasive RF (AUC=0.792)',
+                        data: generateROCPoints(0.792),
                         borderColor: '#F59E0B',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Non-Invasive LR (AUC=0.788)',
+                        data: generateROCPoints(0.788),
+                        borderColor: '#EAB308',
                         backgroundColor: 'transparent',
                         borderWidth: 3,
                         pointRadius: 0,
@@ -1585,31 +1610,31 @@
                         tension: 0.4
                     },
                     {
-                        label: 'Non-Invasive LR (AUC=0.777)',
-                        data: generateROCPoints(0.777),
-                        borderColor: '#EAB308',
+                        label: 'FAST* (AUC=0.721)',
+                        data: generateROCPoints(0.721),
+                        borderColor: '#A855F7',
                         backgroundColor: 'transparent',
                         borderWidth: 2,
-                        borderDash: [5, 5],
+                        borderDash: [3, 3],
                         pointRadius: 0,
                         tension: 0.4
                     },
                     {
-                        label: 'FIB-4 (AUC=0.564)',
-                        data: generateROCPoints(0.564),
+                        label: 'FIB-4* (AUC=0.552)',
+                        data: generateROCPoints(0.552),
                         borderColor: '#EF4444',
                         backgroundColor: 'transparent',
-                        borderWidth: 2,
+                        borderWidth: 1,
                         borderDash: [2, 2],
                         pointRadius: 0,
                         tension: 0.4
                     },
                     {
-                        label: 'APRI (AUC=0.561)',
-                        data: generateROCPoints(0.561),
+                        label: 'APRI* (AUC=0.531)',
+                        data: generateROCPoints(0.531),
                         borderColor: '#DC2626',
                         backgroundColor: 'transparent',
-                        borderWidth: 2,
+                        borderWidth: 1,
                         borderDash: [2, 2],
                         pointRadius: 0,
                         tension: 0.4
@@ -1666,29 +1691,48 @@
             }
         });
 
-        // Feature Importance Chart
+        // Feature Importance Chart - SORTED IN DESCENDING ORDER
         const featureCtx = document.getElementById('featureImportanceChart').getContext('2d');
+
+        // Data sorted by RF importance (descending)
+        const featureData = [
+            {name: 'BMI', lr: 0.829, rf: 33.6},
+            {name: 'Waist\nCircumference', lr: 0.319, rf: 17.9},
+            {name: 'MAP', lr: 0.143, rf: 14.9},
+            {name: 'WHR', lr: -0.007, rf: 14.3},
+            {name: 'Age', lr: 0.251, rf: 12.5},
+            {name: 'Gender\n(Female)', lr: 0.245, rf: 2.7},
+            {name: 'Tobacco', lr: -0.130, rf: 1.6},
+            {name: 'Diabetes', lr: 0.058, rf: 1.0},
+            {name: 'Alcohol', lr: 0.089, rf: 0.9},
+            {name: 'Hypertension', lr: -0.031, rf: 0.8}
+        ];
 
         new Chart(featureCtx, {
             type: 'bar',
             data: {
-                labels: ['BMI', 'Waist\nCircumference', 'Age', 'MAP', 'WHR', 'Gender\n(Female)', 'Tobacco', 'Alcohol', 'Hypertension', 'Diabetes'],
+                labels: featureData.map(d => d.name),
                 datasets: [
                     {
-                        label: 'LR Coefficient (Standardized)',
-                        data: [0.835, 0.317, 0.298, 0.162, -0.043, 0.231, -0.156, 0.118, -0.054, 0.033],
-                        backgroundColor: function(context) {
-                            const value = context.parsed.y;
-                            return value >= 0 ? '#3B82F6' : '#EF4444';
-                        },
-                        borderWidth: 1,
+                        label: 'Random Forest Importance (%)',
+                        data: featureData.map(d => d.rf),
+                        backgroundColor: '#22C55E',
+                        borderColor: '#16A34A',
+                        borderWidth: 2,
                         yAxisID: 'y'
                     },
                     {
-                        label: 'RF Importance (%)',
-                        data: [33.8, 17.2, 13.1, 15.6, 13.5, 2.6, 1.6, 0.9, 0.9, 0.8],
-                        backgroundColor: '#22C55E',
-                        borderWidth: 1,
+                        label: 'Logistic Regression |Coefficient|',
+                        data: featureData.map(d => Math.abs(d.lr) * 10), // Scale for visibility
+                        backgroundColor: function(context) {
+                            const realValue = featureData[context.dataIndex].lr;
+                            return realValue >= 0 ? 'rgba(59, 130, 246, 0.6)' : 'rgba(239, 68, 68, 0.6)';
+                        },
+                        borderColor: function(context) {
+                            const realValue = featureData[context.dataIndex].lr;
+                            return realValue >= 0 ? '#3B82F6' : '#EF4444';
+                        },
+                        borderWidth: 2,
                         yAxisID: 'y1'
                     }
                 ]
@@ -1703,7 +1747,7 @@
                     x: {
                         ticks: {
                             font: {
-                                size: 10
+                                size: 11
                             }
                         }
                     },
@@ -1713,10 +1757,16 @@
                         position: 'left',
                         title: {
                             display: true,
-                            text: 'LR Coefficient'
+                            text: 'Random Forest Importance (%)',
+                            font: {
+                                size: 12
+                            }
                         },
-                        grid: {
-                            drawOnChartArea: false
+                        max: 40,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
                         }
                     },
                     y1: {
@@ -1725,18 +1775,44 @@
                         position: 'right',
                         title: {
                             display: true,
-                            text: 'RF Importance (%)'
+                            text: 'LR |Coefficient| (scaled x10)',
+                            font: {
+                                size: 12
+                            }
                         },
-                        max: 40
+                        max: 10,
+                        grid: {
+                            drawOnChartArea: false
+                        }
                     }
                 },
                 plugins: {
                     legend: {
-                        position: 'top'
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 11
+                            }
+                        }
                     },
                     title: {
                         display: true,
-                        text: 'Feature Importance Comparison'
+                        text: 'Feature Importance in Non-Invasive Model (Descending Order)',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(context) {
+                                if (context.datasetIndex === 1) {
+                                    const realCoef = featureData[context.dataIndex].lr;
+                                    return 'Actual Coef: ' + realCoef.toFixed(3) + (realCoef >= 0 ? ' ↑' : ' ↓');
+                                }
+                                return '';
+                            }
+                        }
                     }
                 }
             }
