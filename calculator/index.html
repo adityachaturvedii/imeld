@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLD Risk Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .model-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .model-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .model-btn:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .model-btn.active {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .model-btn h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .model-btn p {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .threshold-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+
+        .threshold-selector label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .threshold-btn {
+            padding: 10px 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .threshold-btn:hover {
+            border-color: #27ae60;
+        }
+
+        .threshold-btn.active {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .input-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .input-group .unit {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .result-section {
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-positive {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #ef4444;
+        }
+
+        .result-negative {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid #10b981;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .result-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .result-positive .result-icon {
+            background: #ef4444;
+            color: white;
+        }
+
+        .result-negative .result-icon {
+            background: #10b981;
+            color: white;
+        }
+
+        .result-text h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .result-positive .result-text h2 {
+            color: #dc2626;
+        }
+
+        .result-negative .result-text h2 {
+            color: #059669;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detail-box {
+            background: rgba(255,255,255,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .detail-box .value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .detail-box .label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .probability-bar {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .probability-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .result-positive .probability-fill {
+            background: linear-gradient(90deg, #f87171 0%, #ef4444 100%);
+        }
+
+        .result-negative .probability-fill {
+            background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
+        }
+
+        .formula-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .formula-section h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .disclaimer {
+            margin-top: 25px;
+            padding: 15px;
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #92400e;
+        }
+
+        .disclaimer strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .model-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e0f2fe;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #0369a1;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Fatty Liver Disease (FLD) Risk Calculator</h1>
+            <p>Based on validated prediction models from IMELD study</p>
+        </div>
+
+        <div class="content">
+            <!-- Model Selection -->
+            <h3 style="margin-bottom: 15px; color: #2c3e50;">Select Prediction Model</h3>
+            <div class="model-selector">
+                <div class="model-btn active" data-model="1" onclick="selectModel(1)">
+                    <h3>Model 1</h3>
+                    <p>BMI + Waist Circumference</p>
+                    <p style="font-size: 10px; margin-top: 5px;">2 variables</p>
+                </div>
+                <div class="model-btn" data-model="2" onclick="selectModel(2)">
+                    <h3>Model 2</h3>
+                    <p>Extended (6 features)</p>
+                    <p style="font-size: 10px; margin-top: 5px;">BMI, WC, Age, DM, Gender, MAP</p>
+                </div>
+                <div class="model-btn" data-model="3" onclick="selectModel(3)">
+                    <h3>Model 3</h3>
+                    <p>FLD with Fibrosis</p>
+                    <p style="font-size: 10px; margin-top: 5px;">CAP≥248 AND LSM≥8</p>
+                </div>
+            </div>
+
+            <!-- Threshold Selection -->
+            <div class="threshold-selector">
+                <label>Classification Threshold:</label>
+                <button class="threshold-btn active" data-threshold="0.5" onclick="selectThreshold(0.5)">0.5 (Standard)</button>
+                <button class="threshold-btn" data-threshold="0.6" onclick="selectThreshold(0.6)">0.6 (High Specificity)</button>
+            </div>
+
+            <div class="model-info" id="modelInfo">
+                <strong>Model 1:</strong> Simple model using only BMI and Waist Circumference.
+                FLD defined as CAP ≥ 248 dB/m.
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-section">
+                <h3>Enter Patient Data</h3>
+                <div class="input-grid">
+                    <!-- Common inputs for all models -->
+                    <div class="input-group">
+                        <label>BMI</label>
+                        <input type="number" id="bmi" step="0.1" placeholder="e.g., 25.5">
+                        <span class="unit">kg/m²</span>
+                    </div>
+                    <div class="input-group">
+                        <label>Waist Circumference</label>
+                        <input type="number" id="wc" step="0.1" placeholder="e.g., 85">
+                        <span class="unit">cm</span>
+                    </div>
+
+                    <!-- Extended inputs for Model 2 & 3 -->
+                    <div class="input-group extended-input hidden">
+                        <label>Age</label>
+                        <input type="number" id="age" placeholder="e.g., 45">
+                        <span class="unit">years</span>
+                    </div>
+                    <div class="input-group extended-input hidden">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="">Select...</option>
+                            <option value="0">Female</option>
+                            <option value="1">Male</option>
+                        </select>
+                    </div>
+                    <div class="input-group extended-input hidden">
+                        <label>Diabetes</label>
+                        <select id="diabetes">
+                            <option value="">Select...</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                    <div class="input-group extended-input hidden">
+                        <label>Systolic BP</label>
+                        <input type="number" id="sbp" placeholder="e.g., 120">
+                        <span class="unit">mmHg</span>
+                    </div>
+                    <div class="input-group extended-input hidden">
+                        <label>Diastolic BP</label>
+                        <input type="number" id="dbp" placeholder="e.g., 80">
+                        <span class="unit">mmHg</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateRisk()">Calculate FLD Risk</button>
+
+            <!-- Result Section -->
+            <div class="result-section" id="resultSection">
+                <div class="result-header">
+                    <div class="result-icon" id="resultIcon">!</div>
+                    <div class="result-text">
+                        <h2 id="resultTitle">Result</h2>
+                        <p id="resultSubtitle"></p>
+                    </div>
+                </div>
+
+                <div class="result-details">
+                    <div class="detail-box">
+                        <div class="value" id="probabilityValue">0%</div>
+                        <div class="label">Predicted Probability</div>
+                    </div>
+                    <div class="detail-box">
+                        <div class="value" id="thresholdValue">0.5</div>
+                        <div class="label">Classification Threshold</div>
+                    </div>
+                </div>
+
+                <div class="probability-bar">
+                    <div class="probability-fill" id="probabilityFill" style="width: 0%"></div>
+                </div>
+
+                <div class="formula-section">
+                    <h4>Calculation Details</h4>
+                    <div id="formulaDetails"></div>
+                </div>
+            </div>
+
+            <div class="disclaimer">
+                <strong>⚠️ Disclaimer</strong>
+                This calculator is for educational and research purposes only. It should not be used as a substitute
+                for professional medical advice, diagnosis, or treatment. Always consult with a qualified healthcare
+                provider for medical decisions. FLD diagnosis requires clinical assessment including FibroScan (CAP ≥ 248 dB/m).
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Model parameters from training
+        const modelParams = {
+            1: {
+                name: "Model 1 (BMI + WC)",
+                definition: "CAP ≥ 248",
+                intercept: -0.189805,
+                features: ['bmi', 'wc'],
+                coefficients: {
+                    bmi: { coef: 0.813239, mean: 22.818044, std: 4.347017 },
+                    wc: { coef: 0.371061, mean: 84.585071, std: 12.703537 }
+                }
+            },
+            2: {
+                name: "Model 2 (Extended)",
+                definition: "CAP ≥ 248",
+                intercept: -0.234479,
+                features: ['bmi', 'wc', 'age', 'diabetes', 'gender', 'map'],
+                coefficients: {
+                    bmi: { coef: 0.850318, mean: 22.818044, std: 4.347017 },
+                    wc: { coef: 0.235928, mean: 84.585071, std: 12.703537 },
+                    age: { coef: 0.251115, mean: 42.957111, std: 15.447669 },
+                    diabetes: { coef: 0.068481, mean: 0.038158, std: 0.191567 },
+                    gender: { coef: 0.184145, mean: 0.372753, std: 0.483516 },
+                    map: { coef: 0.177963, mean: 93.933144, std: 13.482199 }
+                }
+            },
+            3: {
+                name: "Model 3 (FLD + Fibrosis)",
+                definition: "CAP ≥ 248 AND LSM ≥ 8",
+                intercept: -1.199441,
+                features: ['bmi', 'wc', 'age', 'diabetes', 'gender', 'map'],
+                coefficients: {
+                    bmi: { coef: 1.150281, mean: 22.818044, std: 4.347480 },
+                    wc: { coef: 0.096608, mean: 84.585071, std: 12.703620 },
+                    age: { coef: 0.400035, mean: 42.957111, std: 15.445664 },
+                    diabetes: { coef: 0.000109, mean: 0.038158, std: 0.191107 },
+                    gender: { coef: 0.468459, mean: 0.372753, std: 0.483523 },
+                    map: { coef: 0.604488, mean: 93.933144, std: 13.482672 }
+                }
+            }
+        };
+
+        let selectedModel = 1;
+        let selectedThreshold = 0.5;
+
+        function selectModel(model) {
+            selectedModel = model;
+
+            // Update button states
+            document.querySelectorAll('.model-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.dataset.model) === model) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide extended inputs
+            const extendedInputs = document.querySelectorAll('.extended-input');
+            if (model === 1) {
+                extendedInputs.forEach(el => el.classList.add('hidden'));
+            } else {
+                extendedInputs.forEach(el => el.classList.remove('hidden'));
+            }
+
+            // Update model info
+            const modelInfo = document.getElementById('modelInfo');
+            if (model === 1) {
+                modelInfo.innerHTML = `<strong>Model 1:</strong> Simple model using only BMI and Waist Circumference. FLD defined as CAP ≥ 248 dB/m.`;
+            } else if (model === 2) {
+                modelInfo.innerHTML = `<strong>Model 2:</strong> Extended model using 6 features: BMI, Waist Circumference, Age, Diabetes status, Gender, and Mean Arterial Pressure (MAP). FLD defined as CAP ≥ 248 dB/m.`;
+            } else {
+                modelInfo.innerHTML = `<strong>Model 3:</strong> Predicts FLD with significant fibrosis. Uses same 6 features as Model 2. Outcome defined as CAP ≥ 248 dB/m AND LSM ≥ 8 kPa.`;
+            }
+
+            // Hide result when model changes
+            document.getElementById('resultSection').classList.remove('show');
+        }
+
+        function selectThreshold(threshold) {
+            selectedThreshold = threshold;
+
+            document.querySelectorAll('.threshold-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseFloat(btn.dataset.threshold) === threshold) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Hide result when threshold changes
+            document.getElementById('resultSection').classList.remove('show');
+        }
+
+        function calculateRisk() {
+            const params = modelParams[selectedModel];
+
+            // Get input values
+            const bmi = parseFloat(document.getElementById('bmi').value);
+            const wc = parseFloat(document.getElementById('wc').value);
+
+            // Validate basic inputs
+            if (isNaN(bmi) || isNaN(wc)) {
+                alert('Please enter valid BMI and Waist Circumference values.');
+                return;
+            }
+
+            let values = { bmi, wc };
+            let formulaSteps = [];
+
+            // For extended models, get additional inputs
+            if (selectedModel !== 1) {
+                const age = parseFloat(document.getElementById('age').value);
+                const gender = document.getElementById('gender').value;
+                const diabetes = document.getElementById('diabetes').value;
+                const sbp = parseFloat(document.getElementById('sbp').value);
+                const dbp = parseFloat(document.getElementById('dbp').value);
+
+                if (isNaN(age) || gender === '' || diabetes === '' || isNaN(sbp) || isNaN(dbp)) {
+                    alert('Please fill in all fields for the extended model.');
+                    return;
+                }
+
+                const map = dbp + (sbp - dbp) / 3;
+                values = { bmi, wc, age, diabetes: parseInt(diabetes), gender: parseInt(gender), map };
+
+                formulaSteps.push(`MAP = ${dbp} + (${sbp} - ${dbp})/3 = ${map.toFixed(2)} mmHg`);
+            }
+
+            // Calculate z-score
+            let z = params.intercept;
+            formulaSteps.push(`\nz = ${params.intercept.toFixed(6)} (intercept)`);
+
+            for (const feature of params.features) {
+                const coef = params.coefficients[feature];
+                const value = values[feature];
+                const standardized = (value - coef.mean) / coef.std;
+                const contribution = coef.coef * standardized;
+                z += contribution;
+
+                formulaSteps.push(`  + ${coef.coef.toFixed(6)} × (${value.toFixed(2)} - ${coef.mean.toFixed(2)}) / ${coef.std.toFixed(2)}`);
+                formulaSteps.push(`    = ${coef.coef.toFixed(6)} × ${standardized.toFixed(4)} = ${contribution.toFixed(4)} [${feature}]`);
+            }
+
+            formulaSteps.push(`\nz = ${z.toFixed(4)}`);
+
+            // Calculate probability
+            const probability = 1 / (1 + Math.exp(-z));
+            formulaSteps.push(`P(FLD) = 1 / (1 + exp(-${z.toFixed(4)})) = ${(probability * 100).toFixed(2)}%`);
+
+            // Make prediction
+            const prediction = probability >= selectedThreshold ? 1 : 0;
+            formulaSteps.push(`\nPrediction: ${probability.toFixed(4)} ${prediction === 1 ? '≥' : '<'} ${selectedThreshold} → ${prediction === 1 ? 'FLD Positive' : 'FLD Negative'}`);
+
+            // Display result
+            displayResult(probability, prediction, formulaSteps);
+        }
+
+        function displayResult(probability, prediction, formulaSteps) {
+            const resultSection = document.getElementById('resultSection');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultSubtitle = document.getElementById('resultSubtitle');
+            const probabilityValue = document.getElementById('probabilityValue');
+            const thresholdValue = document.getElementById('thresholdValue');
+            const probabilityFill = document.getElementById('probabilityFill');
+            const formulaDetails = document.getElementById('formulaDetails');
+
+            // Update classes
+            resultSection.classList.remove('result-positive', 'result-negative');
+
+            if (prediction === 1) {
+                resultSection.classList.add('result-positive');
+                resultIcon.textContent = '⚠️';
+                resultTitle.textContent = 'FLD Positive (High Risk)';
+                resultSubtitle.textContent = `Based on ${modelParams[selectedModel].name}, the patient is predicted to have Fatty Liver Disease (${modelParams[selectedModel].definition}).`;
+            } else {
+                resultSection.classList.add('result-negative');
+                resultIcon.textContent = '✓';
+                resultTitle.textContent = 'FLD Negative (Low Risk)';
+                resultSubtitle.textContent = `Based on ${modelParams[selectedModel].name}, the patient is predicted to NOT have Fatty Liver Disease.`;
+            }
+
+            probabilityValue.textContent = (probability * 100).toFixed(1) + '%';
+            thresholdValue.textContent = selectedThreshold;
+            probabilityFill.style.width = (probability * 100) + '%';
+
+            formulaDetails.innerHTML = formulaSteps.join('<br>');
+
+            resultSection.classList.add('show');
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Initialize
+        selectModel(1);
+    </script>
+</body>
+</html>
