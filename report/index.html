@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FLD Analysis Report</title>
+
+<style>
+  body {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    line-height: 1.25;
+    white-space: pre;          /* preserve spacing */
+    background: #ffffff;
+    color: #000000;
+    margin: 0;
+    padding: 16px;
+  }
+
+  pre {
+    margin: 0;
+  }
+</style>
+</head>
+
+<body>
+<pre>
+====================================================================================================
+COMPREHENSIVE FLD ANALYSIS WITH DIABETES STRATIFICATION
+====================================================================================================
+
+Configuration:
+  Data Directory: /Users/aditya/Documents/imeld_data
+  Output Directory: /Users/aditya/Documents/imeld_data/comprehensive_fld_analysis
+  CAP Threshold: 248 dB/m
+  Asian WC Cutoffs: Male ≥90 cm, Female ≥80 cm
+  Asian BMI Cutoff: ≥23 kg/m²
+
+====================================================================================================
+1. LOADING DATA
+====================================================================================================
+Loaded dataset: 3194 participants
+Excluded 64 participants with missing diabetes status
+Final dataset: 3130 participants
+
+Diabetes variable: 'catdm'
+  Diabetes Present: 697
+  Diabetes Absent: 2433
+
+Data Summary:
+  CAP range: 100 - 450 dB/m
+  WC range: 45.0 - 133.0 cm
+  BMI range: 15.0 - 40.5 kg/m²
+
+Gender Distribution:
+  Male (Gender=0): 1958
+  Female (Gender=1): 1172
+
+Outcome Prevalence:
+  FLD (CAP ≥ 248): 922 (29.5%)
+
+====================================================================================================
+2. DIABETES STRATIFICATION ANALYSIS
+   Research Question: Does diabetes modify the effect of WC/BMI on FLD risk?
+====================================================================================================
+
+--- 2.1 WC-FLD Relationship by Diabetes Status ---
+
+  Diabetes      WC Status         N   FLD+     FLD%       OR             95% CI    p-value
+-----------------------------------------------------------------------------------------------
+ Diabetes-      Normal WC      1303    211    16.2%     1.00        [0.81-1.23]     1.0000
+ Diabetes-       High WC       1130    452    40.0%     3.45        [2.85-4.17]     0.0000
+ Diabetes+      Normal WC       319     71    22.3%     1.48        [1.10-2.00]     0.0132
+ Diabetes+       High WC        378    188    49.7%     5.12        [3.99-6.57]     0.0000
+
+--- 2.2 BMI-FLD Relationship by Diabetes Status ---
+
+  Diabetes     BMI Status         N   FLD+     FLD%       OR             95% CI    p-value
+-----------------------------------------------------------------------------------------------
+ Diabetes-     Normal BMI      1432    199    13.9%     1.00        [0.81-1.24]     1.0000
+ Diabetes-      High BMI       1001    464    46.4%     5.35        [4.41-6.50]     0.0000
+ Diabetes+     Normal BMI       316     52    16.5%     1.22        [0.87-1.70]     0.2777
+ Diabetes+      High BMI        381    207    54.3%     7.37        [5.73-9.48]     0.0000
+
+--- 2.3 Combined WC+BMI Risk by Diabetes Status ---
+
+  Diabetes       Risk Category           N   FLD+     FLD%       OR             95% CI    p-value
+--------------------------------------------------------------------------------------------------------------
+ Diabetes-    Low WC + Low BMI    1002    116    11.6%     1.00        [0.76-1.31]     1.0000
+ Diabetes-   High WC + Low BMI     430     83    19.3%     1.83        [1.34-2.49]     0.0002
+ Diabetes-   Low WC + High BMI     301     95    31.6%     3.52        [2.58-4.81]     0.0000
+ Diabetes-   High WC + High BMI    700    369    52.7%     8.51       [6.67-10.87]     0.0000
+ Diabetes+    Low WC + Low BMI     214     29    13.6%     1.20        [0.77-1.85]     0.4884
+ Diabetes+   High WC + Low BMI     102     23    22.5%     2.22        [1.34-3.68]     0.0025
+ Diabetes+   Low WC + High BMI     105     42    40.0%     5.09        [3.29-7.87]     0.0000
+ Diabetes+   High WC + High BMI    276    165    59.8%    11.35       [8.34-15.46]     0.0000
+
+--- 2.4 Interaction Analysis: WC × Diabetes ---
+
+Logistic Regression with Interaction Term:
+Variable                        Coef         SE         OR               95% CI    p-value
+------------------------------------------------------------------------------------------
+Intercept                     -1.644      0.075       0.19          [0.17-0.22]     0.0000
+High_WC                        1.238      0.097       3.45          [2.85-4.17]     0.0000
+Diabetes                       0.393      0.154       1.48          [1.10-2.00]     0.0108
+High_WC:Diabetes               0.002      0.195       1.00          [0.68-1.47]     0.9929
+
+Interaction Effect (WC × Diabetes):
+  --> Non-significant interaction (p = 0.9929)
+  --> The effects of WC and Diabetes are ADDITIVE
+
+Saved: Diabetes_Stratification_Analysis.csv
+
+====================================================================================================
+2.5 ALL COMBINATIONS ANALYSIS
+   Comprehensive breakdown of all WC × BMI × Diabetes combinations
+====================================================================================================
+
+--- A. WC Status Alone ---
+
+   WC Status           N     FLD+       FLD%         OR               95% CI    Sens%    Spec%
+-----------------------------------------------------------------------------------------------
+    Low WC          1622      282      17.4%        REF            Reference        -        -
+    High WC         1508      640      42.4%       3.50          [2.97-4.13]    69.4%    60.7%
+
+--- B. BMI Status Alone ---
+
+  BMI Status           N     FLD+       FLD%         OR               95% CI    Sens%    Spec%
+-----------------------------------------------------------------------------------------------
+    Low BMI         1748      251      14.4%        REF            Reference        -        -
+   High BMI         1382      671      48.6%       5.63          [4.75-6.67]    72.8%    67.8%
+
+--- C. All WC × BMI Combinations (4 groups) ---
+
+       Combination               N     FLD+       FLD%         OR               95% CI    Sens%    Spec%
+---------------------------------------------------------------------------------------------------------
+    Low WC + Low BMI          1216      145      11.9%        REF            Reference        -        -
+    High WC + Low BMI          532      106      19.9%       1.84          [1.40-2.42]    11.5%    48.5%
+    Low WC + High BMI          406      137      33.7%       3.76          [2.87-4.92]    14.9%    48.5%
+   High WC + High BMI          976      534      54.7%       8.92         [7.20-11.06]    57.9%    48.5%
+
+--- D. All WC × BMI × Diabetes Combinations (8 groups) ---
+
+              Combination                      N    FLD+      FLD%        OR               95% CI    Sens%    Spec%
+------------------------------------------------------------------------------------------------------------------------
+         Low WC + Low BMI + DM-             1002     116     11.6%       REF            Reference        -        -
+        High WC + Low BMI + DM-              430      83     19.3%      1.83          [1.34-2.49]     9.0%    40.1%
+        Low WC + High BMI + DM-              301      95     31.6%      3.52          [2.58-4.81]    10.3%    40.1%
+        High WC + High BMI + DM-             700     369     52.7%      8.51         [6.67-10.87]    40.0%    40.1%
+         Low WC + Low BMI + DM+              214      29     13.6%      1.20          [0.77-1.85]     3.1%    40.1%
+        High WC + Low BMI + DM+              102      23     22.5%      2.22          [1.34-3.68]     2.5%    40.1%
+        Low WC + High BMI + DM+              105      42     40.0%      5.09          [3.29-7.87]     4.6%    40.1%
+        High WC + High BMI + DM+             276     165     59.8%     11.35         [8.34-15.46]    17.9%    40.1%
+
+--- E. WC × BMI Combinations by Gender ---
+
+  MALE:
+         Combination              N    FLD+      FLD%        OR             95% CI    Sens%    Spec%
+  ----------------------------------------------------------------------------------------------------
+      Low WC + Low BMI          978     119     12.2%       REF          Reference        -        -
+      High WC + Low BMI         108      23     21.3%      1.95        [1.19-3.22]     4.5%    59.3%
+      Low WC + High BMI         350     111     31.7%      3.35        [2.49-4.51]    21.8%    59.3%
+     High WC + High BMI         522     256     49.0%      6.95        [5.37-8.99]    50.3%    59.3%
+
+  FEMALE:
+         Combination              N    FLD+      FLD%        OR             95% CI    Sens%    Spec%
+  ----------------------------------------------------------------------------------------------------
+      Low WC + Low BMI          238      26     10.9%       REF          Reference        -        -
+      High WC + Low BMI         424      83     19.6%      1.98        [1.24-3.18]    20.1%    27.9%
+      Low WC + High BMI          56      26     46.4%      7.07       [3.64-13.74]     6.3%    27.9%
+     High WC + High BMI         454     278     61.2%     12.88       [8.22-20.18]    67.3%    27.9%
+
+Saved: All_Combinations_Analysis.csv
+
+====================================================================================================
+3. SEX-SPECIFIC PREDICTION SCORES
+   Models: Age+WC, Age+BMI, Age+WC+BMI
+====================================================================================================
+
+--- MALE (n=1958) ---
+
+Model                     AUC             95% CI     Sens     Spec      Acc
+---------------------------------------------------------------------------
+Age + WC                0.741      [0.715-0.764]    67.8%    67.8%    67.8%
+
+  Age + WC Coefficients:
+    Age: OR = 1.027, p = 0.0000
+    WaistCircumference: OR = 1.063, p = 0.0000
+Age + BMI               0.765      [0.741-0.790]    70.1%    70.0%    70.1%
+
+  Age + BMI Coefficients:
+    Age: OR = 1.029, p = 0.0000
+    bmi: OR = 1.210, p = 0.0000
+Age + WC + BMI          0.770      [0.745-0.794]    70.7%    70.9%    70.8%
+
+  Age + WC + BMI Coefficients:
+    Age: OR = 1.028, p = 0.0000
+    WaistCircumference: OR = 1.027, p = 0.0000
+    bmi: OR = 1.153, p = 0.0000
+
+--- FEMALE (n=1172) ---
+
+Model                     AUC             95% CI     Sens     Spec      Acc
+---------------------------------------------------------------------------
+Age + WC                0.721      [0.690-0.752]    67.3%    67.5%    67.4%
+
+  Age + WC Coefficients:
+    Age: OR = 1.005, p = 0.1985
+    WaistCircumference: OR = 1.074, p = 0.0000
+Age + BMI               0.804      [0.778-0.829]    73.1%    73.5%    73.3%
+
+  Age + BMI Coefficients:
+    Age: OR = 1.012, p = 0.0094
+    bmi: OR = 1.391, p = 0.0000
+Age + WC + BMI          0.806      [0.781-0.830]    73.1%    73.1%    73.1%
+
+  Age + WC + BMI Coefficients:
+    Age: OR = 1.010, p = 0.0237
+    WaistCircumference: OR = 1.019, p = 0.0143
+    bmi: OR = 1.346, p = 0.0000
+
+Saved: Sex_Specific_Prediction_Scores.csv
+
+====================================================================================================
+4. REVERSE NOMOGRAM ANALYSIS
+   Predicting probability of CAP ≥ 248 dB/m at incremental WC thresholds
+====================================================================================================
+
+--- MALE (Starting at WC ≥ 90 cm) ---
+
+ WC Cutoff   N≥Cutoff   N<Cutoff     FLD+     FLD%     Sens     Spec      PPV      NPV
+-----------------------------------------------------------------------------------------------
+        90        630       1328      279    44.3%    54.8%    75.8%    44.3%    82.7%
+        91        548       1410      254    46.4%    49.9%    79.7%    46.4%    81.9%
+        92        514       1444      241    46.9%    47.3%    81.2%    46.9%    81.4%
+        93        462       1496      228    49.4%    44.8%    83.9%    49.4%    81.2%
+        94        436       1522      225    51.6%    44.2%    85.4%    51.6%    81.3%
+        95        386       1572      200    51.8%    39.3%    87.2%    51.8%    80.3%
+        96        346       1612      186    53.8%    36.5%    89.0%    53.8%    80.0%
+        97        307       1651      170    55.4%    33.4%    90.5%    55.4%    79.5%
+        98        290       1668      161    55.5%    31.6%    91.1%    55.5%    79.1%
+        99        236       1722      136    57.6%    26.7%    93.1%    57.6%    78.3%
+       100        222       1736      125    56.3%    24.6%    93.3%    56.3%    77.9%
+       101        175       1783      107    61.1%    21.0%    95.3%    61.1%    77.5%
+       102        160       1798      100    62.5%    19.6%    95.9%    62.5%    77.3%
+       103        133       1825       85    63.9%    16.7%    96.7%    63.9%    76.8%
+       104        118       1840       80    67.8%    15.7%    97.4%    67.8%    76.7%
+       105         99       1859       67    67.7%    13.2%    97.8%    67.7%    76.2%
+       106         88       1870       61    69.3%    12.0%    98.1%    69.3%    76.0%
+       107         69       1889       48    69.6%     9.4%    98.6%    69.6%    75.6%
+       108         59       1899       42    71.2%     8.3%    98.8%    71.2%    75.4%
+       109         52       1906       38    73.1%     7.5%    99.0%    73.1%    75.3%
+       110         48       1910       35    72.9%     6.9%    99.1%    72.9%    75.2%
+
+--- FEMALE (Starting at WC ≥ 80 cm) ---
+
+ WC Cutoff   N≥Cutoff   N<Cutoff     FLD+     FLD%     Sens     Spec      PPV      NPV
+-----------------------------------------------------------------------------------------------
+        80        878        294      361    41.1%    87.4%    31.9%    41.1%    82.3%
+        81        827        345      352    42.6%    85.2%    37.4%    42.6%    82.3%
+        82        795        377      345    43.4%    83.5%    40.7%    43.4%    82.0%
+        83        754        418      340    45.1%    82.3%    45.5%    45.1%    82.5%
+        84        730        442      338    46.3%    81.8%    48.4%    46.3%    83.0%
+        85        687        485      324    47.2%    78.5%    52.2%    47.2%    81.6%
+        86        648        524      310    47.8%    75.1%    55.5%    47.8%    80.3%
+        87        610        562      302    49.5%    73.1%    59.4%    49.5%    80.2%
+        88        589        583      294    49.9%    71.2%    61.1%    49.9%    79.6%
+        89        535        637      282    52.7%    68.3%    66.7%    52.7%    79.4%
+        90        508        664      272    53.5%    65.9%    68.9%    53.5%    78.8%
+        91        442        730      243    55.0%    58.8%    73.8%    55.0%    76.7%
+        92        417        755      233    55.9%    56.4%    75.8%    55.9%    76.2%
+        93        370        802      217    58.6%    52.5%    79.8%    58.6%    75.6%
+        94        349        823      207    59.3%    50.1%    81.3%    59.3%    75.0%
+        95        313        859      189    60.4%    45.8%    83.7%    60.4%    73.9%
+        96        286        886      177    61.9%    42.9%    85.6%    61.9%    73.4%
+        97        240        932      154    64.2%    37.3%    88.7%    64.2%    72.2%
+        98        210        962      136    64.8%    32.9%    90.3%    64.8%    71.2%
+        99        180        992      124    68.9%    30.0%    92.6%    68.9%    70.9%
+       100        170       1002      117    68.8%    28.3%    93.0%    68.8%    70.5%
+
+Saved: Reverse_Nomogram_WC_to_CAP.csv
+
+====================================================================================================
+5. DIAGNOSTIC PERFORMANCE COMPARISON AT WC CUTOFFS
+   Predictors: WC alone, BMI alone, WC+BMI combined
+====================================================================================================
+
+--- MALE ---
+
+  WC Cut    Predictor     Sens     Spec      Acc      AUC      PPV      NPV
+---------------------------------------------------------------------------
+      90     WC alone    54.8%    75.8%    70.3%    0.715    44.3%    82.7%
+      90    BMI alone    72.1%    65.1%    67.0%    0.745    42.1%    86.9%
+      90       WC+BMI    76.6%    59.3%    63.8%    0.752    39.8%    87.8%
+---------------------------------------------------------------------------
+      95     WC alone    39.3%    87.2%    74.7%    0.715    51.8%    80.3%
+      95    BMI alone    72.1%    65.1%    67.0%    0.745    42.1%    86.9%
+      95       WC+BMI    74.3%    63.4%    66.2%    0.752    41.6%    87.5%
+---------------------------------------------------------------------------
+     100     WC alone    24.6%    93.3%    75.4%    0.715    56.3%    77.9%
+     100    BMI alone    72.1%    65.1%    67.0%    0.745    42.1%    86.9%
+     100       WC+BMI    73.3%    64.7%    66.9%    0.752    42.1%    87.3%
+---------------------------------------------------------------------------
+
+--- FEMALE ---
+
+  WC Cut    Predictor     Sens     Spec      Acc      AUC      PPV      NPV
+---------------------------------------------------------------------------
+      80     WC alone    87.4%    31.9%    51.5%    0.719    41.1%    82.3%
+      80    BMI alone    73.6%    72.9%    73.1%    0.802    59.6%    83.5%
+      80       WC+BMI    93.7%    27.9%    51.1%    0.804    41.4%    89.1%
+---------------------------------------------------------------------------
+      85     WC alone    78.5%    52.2%    61.4%    0.719    47.2%    81.6%
+      85    BMI alone    73.6%    72.9%    73.1%    0.802    59.6%    83.5%
+      85       WC+BMI    90.3%    45.8%    61.5%    0.804    47.6%    89.7%
+---------------------------------------------------------------------------
+      90     WC alone    65.9%    68.9%    67.8%    0.719    53.5%    78.8%
+      90    BMI alone    73.6%    72.9%    73.1%    0.802    59.6%    83.5%
+      90       WC+BMI    84.0%    59.2%    67.9%    0.804    52.8%    87.2%
+---------------------------------------------------------------------------
+
+Saved: Diagnostic_Performance_Comparison.csv
+
+====================================================================================================
+5.5 WC BINS - FLD PREVALENCE AND PREDICTOR COMPARISON
+   Analyzing FLD prevalence and AUC of WC vs BMI as continuous predictors within WC bins
+   Also includes average CAP, LSM, BMI for each bin
+====================================================================================================
+
+--- OVERALL (All Genders) ---
+
+      WC Bin      N    FLD%   Avg CAP   Avg LSM   Avg BMI   WC AUC   BMI AUC    Δ AUC   WC Corr   BMI Corr
+-------------------------------------------------------------------------------------------------------------------
+80- 90 cm    929   24.2%     219.6       4.5      22.2    0.574     0.724  -0.150     0.127      0.371
+85- 95 cm    894   31.9%     228.8       4.6      23.6    0.580     0.685  -0.105     0.132      0.293
+90-100 cm    746   41.4%     240.0       4.6      24.8    0.576     0.669  -0.093     0.185      0.277
+95-105 cm    530   50.6%     253.3       4.7      26.1    0.562     0.640  -0.077     0.163      0.267
+100-110 cm    304   57.6%     262.9       5.2      27.4    0.581     0.588  -0.006     0.177      0.205
+
+--- MALE ---
+
+      WC Bin      N    FLD%   Avg CAP   Avg LSM   Avg BMI   WC AUC   BMI AUC    Δ AUC   WC Corr   BMI Corr
+-------------------------------------------------------------------------------------------------------------------
+80- 90 cm    559   24.3%     219.3       4.4      22.7    0.572     0.702  -0.130     0.153      0.345
+85- 95 cm    520   28.8%     227.5       4.5      24.1    0.582     0.688  -0.106     0.150      0.294
+90-100 cm    408   37.7%     238.4       4.4      25.5    0.599     0.681  -0.082     0.231      0.289
+95-105 cm    287   46.3%     250.6       4.5      26.8    0.556     0.624  -0.068     0.149      0.222
+100-110 cm    174   51.7%     258.8       5.1      28.1    0.610     0.578  +0.032     0.255      0.185
+
+--- FEMALE ---
+
+      WC Bin      N    FLD%   Avg CAP   Avg LSM   Avg BMI   WC AUC   BMI AUC    Δ AUC   WC Corr   BMI Corr
+-------------------------------------------------------------------------------------------------------------------
+80- 90 cm    370   24.1%     220.2       4.6      21.5    0.577     0.756  -0.179     0.089      0.431
+85- 95 cm    374   36.1%     230.6       4.8      22.8    0.576     0.715  -0.139     0.108      0.323
+90-100 cm    338   45.9%     241.9       4.7      24.0    0.548     0.699  -0.150     0.136      0.300
+95-105 cm    243   55.6%     256.5       5.0      25.3    0.573     0.702  -0.129     0.183      0.371
+100-110 cm    130   65.4%     268.5       5.4      26.4    0.552     0.674  -0.123     0.091      0.331
+
+Saved: WC_Bin_vs_BMI_Comparison.csv
+
+--- INTERPRETATION ---
+WC AUC / BMI AUC: Discriminative ability of continuous WC/BMI for FLD within each bin
+Positive Δ AUC: WC is a better predictor than BMI in that WC range
+WC Corr / BMI Corr: Pearson correlation with CAP (continuous steatosis measure)
+
+Note: AUC within narrow WC bins is expected to be lower due to restricted variance
+
+WC shows >0.02 AUC advantage over BMI in:
+  Male: WC 100-110 cm (Δ AUC = +0.032, FLD Prev = 51.7%)
+
+====================================================================================================
+5.6 SEQUENTIAL FEATURE ADDITION ANALYSIS
+   Starting from WC, sequentially adding features to show incremental improvement
+   Metrics: AUC, Sensitivity, Specificity, Accuracy, Balanced Accuracy
+====================================================================================================
+
+--- OVERALL ---
+
+                 Model                        AUC    Δ AUC     Sens     Spec      Acc  Bal Acc   Avg CAP   Avg LSM
+------------------------------------------------------------------------------------------------------------------------
+                   WC                       0.721  +0.000    69.1%    64.9%    66.2%    67.0%     224.7       4.6
+                WC + BMI                    0.770  +0.049    73.2%    70.4%    71.2%    71.8%     224.7       4.6
+             WC + BMI + Age                 0.778  +0.008    74.3%    69.6%    71.0%    71.9%     224.7       4.6
+       WC + BMI + Age + Diabetes            0.778  +0.000    75.5%    68.4%    70.5%    71.9%     224.7       4.6
+   WC + BMI + Age + Diabetes + Gender       0.783  +0.004    70.0%    74.8%    73.4%    72.4%     224.7       4.6
+
+--- MALE ---
+
+                 Model                        AUC    Δ AUC     Sens     Spec      Acc  Bal Acc   Avg CAP   Avg LSM
+------------------------------------------------------------------------------------------------------------------------
+                   WC                       0.715  +0.000    65.8%    67.8%    67.3%    66.8%     221.0       4.5
+                WC + BMI                    0.752  +0.037    72.1%    69.1%    69.9%    70.6%     221.0       4.5
+             WC + BMI + Age                 0.770  +0.018    74.7%    67.9%    69.7%    71.3%     221.0       4.5
+       WC + BMI + Age + Diabetes            0.771  +0.001    76.4%    66.4%    69.0%    71.4%     221.0       4.5
+       WC + BMI + Age + Diabetes            0.771  +0.000    76.4%    66.4%    69.0%    71.4%     221.0       4.5
+
+--- FEMALE ---
+
+                 Model                        AUC    Δ AUC     Sens     Spec      Acc  Bal Acc   Avg CAP   Avg LSM
+------------------------------------------------------------------------------------------------------------------------
+                   WC                       0.719  +0.000    68.3%    66.7%    67.2%    67.5%     231.0       4.8
+                WC + BMI                    0.804  +0.085    73.8%    74.0%    74.0%    73.9%     231.0       4.8
+             WC + BMI + Age                 0.806  +0.002    77.0%    71.4%    73.4%    74.2%     231.0       4.8
+       WC + BMI + Age + Diabetes            0.806  +0.000    76.8%    71.5%    73.4%    74.1%     231.0       4.8
+       WC + BMI + Age + Diabetes            0.806  +0.000    76.8%    71.5%    73.4%    74.1%     231.0       4.8
+
+Saved: Sequential_Feature_Addition.csv
+
+--- SUMMARY: Incremental AUC Gains ---
+
+Overall:
+  WC: AUC = 0.721 (baseline)
+  WC + BMI: AUC = 0.770 (Δ = +0.049)
+  WC + BMI + Age: AUC = 0.778 (Δ = +0.008)
+  WC + BMI + Age + Diabetes: AUC = 0.778 (Δ = +0.000)
+  WC + BMI + Age + Diabetes + Gender: AUC = 0.783 (Δ = +0.004)
+
+Male:
+  WC: AUC = 0.715 (baseline)
+  WC + BMI: AUC = 0.752 (Δ = +0.037)
+  WC + BMI + Age: AUC = 0.770 (Δ = +0.018)
+  WC + BMI + Age + Diabetes: AUC = 0.771 (Δ = +0.001)
+  WC + BMI + Age + Diabetes: AUC = 0.771 (Δ = +0.000)
+
+Female:
+  WC: AUC = 0.719 (baseline)
+  WC + BMI: AUC = 0.804 (Δ = +0.085)
+  WC + BMI + Age: AUC = 0.806 (Δ = +0.002)
+  WC + BMI + Age + Diabetes: AUC = 0.806 (Δ = +0.000)
+  WC + BMI + Age + Diabetes: AUC = 0.806 (Δ = +0.000)
+
+====================================================================================================
+5.6.1 LOGISTIC REGRESSION FORMULAS FOR FLD PREDICTION
+   Providing explicit formulas for clinical use
+   P(FLD) = 1 / (1 + exp(-z)) where z = intercept + Σ(coefficient × variable)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+GENDER-SPECIFIC FORMULAS: WC + BMI + Age + Diabetes
+----------------------------------------------------------------------------------------------------
+
+==================================================
+MALE MODEL (N = 1958, AUC = 0.771)
+==================================================
+
+Formula: z = -6.8270 + 0.0238 × WaistCircumference + 0.1482 × bmi + 0.0275 × Age + 0.2385 × Diabetes
+
+P(FLD) = 1 / (1 + exp(-z))
+
+Coefficient Details:
+  Variable              Coefficient         OR Interpretation                          
+  ----------------------------------------------------------------------------------
+  Intercept                 -6.8270         -- Baseline log-odds                       
+  WaistCircumference         0.0238      1.024 Per 1 cm increase in WC                 
+  bmi                        0.1482      1.160 Per 1 kg/m² increase in BMI             
+  Age                        0.0275      1.028 Per 1 year increase in age              
+  Diabetes                   0.2385      1.269 Diabetes present vs absent              
+
+==================================================
+FEMALE MODEL (N = 1172, AUC = 0.806)
+==================================================
+
+Formula: z = -9.2554 + 0.0181 × WaistCircumference + 0.3090 × bmi + 0.0108 × Age  -0.0189 × Diabetes
+
+P(FLD) = 1 / (1 + exp(-z))
+
+Coefficient Details:
+  Variable              Coefficient         OR Interpretation                          
+  ----------------------------------------------------------------------------------
+  Intercept                 -9.2554         -- Baseline log-odds                       
+  WaistCircumference         0.0181      1.018 Per 1 cm increase in WC                 
+  bmi                        0.3090      1.362 Per 1 kg/m² increase in BMI             
+  Age                        0.0108      1.011 Per 1 year increase in age              
+  Diabetes                  -0.0189      0.981 Diabetes present vs absent              
+
+----------------------------------------------------------------------------------------------------
+OVERALL FORMULA: WC + BMI + Age + Diabetes + Gender
+----------------------------------------------------------------------------------------------------
+
+==================================================
+OVERALL MODEL (N = 3130, AUC = 0.783)
+==================================================
+
+Formula: z = -7.5750 + 0.0210 × WaistCircumference + 0.1987 × bmi + 0.0195 × Age + 0.1543 × Diabetes + 0.4435 × Gender
+
+P(FLD) = 1 / (1 + exp(-z))
+
+Note: Gender = 0 for Male, 1 for Female
+
+Coefficient Details:
+  Variable              Coefficient         OR Interpretation                          
+  ----------------------------------------------------------------------------------
+  Intercept                 -7.5750         -- Baseline log-odds                       
+  WaistCircumference         0.0210      1.021 Per 1 cm increase in WC                 
+  bmi                        0.1987      1.220 Per 1 kg/m² increase in BMI             
+  Age                        0.0195      1.020 Per 1 year increase in age              
+  Diabetes                   0.1543      1.167 Diabetes present vs absent              
+  Gender                     0.4435      1.558 Female vs Male                          
+
+----------------------------------------------------------------------------------------------------
+EXAMPLE CALCULATIONS
+----------------------------------------------------------------------------------------------------
+
+Example 1: 45-year-old Male with WC=95cm, BMI=28, No Diabetes
+  Using Male formula:
+  z = -6.8270 + 0.0238×95 + 0.1482×28 + 0.0275×45 + 0.2385×0
+  z = 0.8239
+  P(FLD) = 1/(1+exp(-0.8239)) = 0.695 (69.5%)
+
+Example 2: 55-year-old Female with WC=88cm, BMI=30, Diabetes present
+  Using Female formula:
+  z = -9.2554 + 0.0181×88 + 0.3090×30 + 0.0108×55 + -0.0189×1
+  z = 2.1863
+  P(FLD) = 1/(1+exp(-2.1863)) = 0.899 (89.9%)
+
+Saved: Logistic_Regression_Formulas.csv
+
+====================================================================================================
+5.7 STATISTICAL MODEL COMPARISON
+   Comparing: Logistic Regression, Random Forest, CART (Decision Tree), LDA, QDA, SVM, KNN, Naive Bayes
+   Using 5-fold cross-validation for robust performance estimates
+====================================================================================================
+
+Features used for comparison: ['WaistCircumference', 'bmi', 'Age', 'Diabetes']
+
+--- OVERALL ---
+
+          Model                AUC          AUC CI     Sens     Spec      Acc  Bal Acc       F1   Avg CAP   Avg LSM
+----------------------------------------------------------------------------------------------------------------------------------
+   Logistic Regression       0.777 (0.763-0.791)    75.5%    68.4%    70.5%    71.9%    60.1%     224.7       4.6
+      Random Forest          0.774 (0.763-0.786)    76.5%    73.0%    74.0%    74.7%    63.4%     224.7       4.6
+  CART (Decision Tree)       0.750 (0.737-0.763)    82.1%    64.0%    69.3%    73.0%    61.2%     224.7       4.6
+           LDA               0.777 (0.763-0.791)    76.1%    67.4%    70.0%    71.8%    59.9%     224.7       4.6
+           QDA               0.772 (0.762-0.781)    71.3%    71.7%    71.6%    71.5%    59.6%     224.7       4.6
+        SVM (RBF)            0.770 (0.757-0.783)    74.4%    69.6%    71.0%    72.0%    60.2%     224.7       4.6
+        KNN (k=5)            0.702 (0.693-0.711)    82.9%    73.6%    76.3%    78.2%    67.3%     224.7       4.6
+       Naive Bayes           0.772 (0.761-0.782)    72.9%    69.1%    70.2%    71.0%    59.0%     224.7       4.6
+    Gradient Boosting        0.768 (0.756-0.780)    84.7%    65.4%    71.1%    75.1%    63.3%     224.7       4.6
+
+--- MALE ---
+
+          Model                AUC          AUC CI     Sens     Spec      Acc  Bal Acc       F1   Avg CAP   Avg LSM
+----------------------------------------------------------------------------------------------------------------------------------
+   Logistic Regression       0.769 (0.753-0.785)    76.4%    66.4%    69.0%    71.4%    56.2%     221.0       4.5
+      Random Forest          0.768 (0.752-0.784)    78.4%    75.2%    76.0%    76.8%    63.0%     221.0       4.5
+  CART (Decision Tree)       0.722 (0.703-0.741)    75.0%    73.1%    73.6%    74.1%    59.6%     221.0       4.5
+           LDA               0.769 (0.752-0.785)    74.1%    68.1%    69.7%    71.1%    55.9%     221.0       4.5
+           QDA               0.765 (0.744-0.786)    65.8%    77.2%    74.3%    71.5%    57.1%     221.0       4.5
+        SVM (RBF)            0.760 (0.746-0.775)    65.8%    78.4%    75.1%    72.1%    57.9%     221.0       4.5
+        KNN (k=5)            0.696 (0.678-0.714)    77.6%    76.7%    77.0%    77.2%    63.7%     221.0       4.5
+       Naive Bayes           0.765 (0.749-0.782)    66.6%    75.4%    73.1%    71.0%    56.3%     221.0       4.5
+    Gradient Boosting        0.762 (0.744-0.779)    75.2%    81.0%    79.5%    78.1%    65.6%     221.0       4.5
+
+--- FEMALE ---
+
+          Model                AUC          AUC CI     Sens     Spec      Acc  Bal Acc       F1   Avg CAP   Avg LSM
+----------------------------------------------------------------------------------------------------------------------------------
+   Logistic Regression       0.801 (0.775-0.826)    76.8%    71.5%    73.4%    74.1%    67.0%     231.0       4.8
+      Random Forest          0.794 (0.769-0.820)    78.7%    77.7%    78.1%    78.2%    71.7%     231.0       4.8
+  CART (Decision Tree)       0.762 (0.733-0.791)    87.4%    65.5%    73.2%    76.4%    69.7%     231.0       4.8
+           LDA               0.801 (0.776-0.826)    77.5%    70.6%    73.0%    74.1%    66.9%     231.0       4.8
+           QDA               0.793 (0.766-0.821)    72.4%    75.0%    74.1%    73.7%    66.3%     231.0       4.8
+        SVM (RBF)            0.779 (0.758-0.800)    71.7%    76.8%    75.0%    74.2%    66.9%     231.0       4.8
+        KNN (k=5)            0.755 (0.745-0.766)    87.2%    72.5%    77.6%    79.8%    73.3%     231.0       4.8
+       Naive Bayes           0.793 (0.764-0.822)    79.9%    66.1%    71.0%    73.0%    66.0%     231.0       4.8
+    Gradient Boosting        0.782 (0.763-0.801)    81.6%    81.8%    81.7%    81.7%    75.9%     231.0       4.8
+
+Saved: Statistical_Model_Comparison.csv
+
+--- Generating Model Comparison Visualizations ---
+Saved: Model_AUC_Comparison.png
+Saved: Model_Sens_Spec_Tradeoff.png
+Saved: Model_ROC_Curves_Comparison.png
+Saved: Model_Metrics_Heatmap.png
+Saved: RF_Feature_Importance.png
+
+--- SUMMARY: Best Performing Models ---
+
+Overall:
+  Best AUC: Logistic Regression (AUC = 0.777)
+  Best Balanced Accuracy: KNN (k=5) (Bal Acc = 78.2%)
+
+Male:
+  Best AUC: Logistic Regression (AUC = 0.769)
+  Best Balanced Accuracy: Gradient Boosting (Bal Acc = 78.1%)
+
+Female:
+  Best AUC: LDA (AUC = 0.801)
+  Best Balanced Accuracy: Gradient Boosting (Bal Acc = 81.7%)
+
+====================================================================================================
+5.7.1. CART MODEL - WEIGHTED ANALYSIS (Classification and Regression Tree)
+      Decision Tree with class_weight='balanced' for FLD prediction
+      Outcome: CAP ≥ 248 dB/m
+====================================================================================================
+
+--- CART MODEL PERFORMANCE BY DEPTH ---
+
+ Depth     Gender        N      AUC    Sens%    Spec%   Bal Acc%     PPV%     NPV%
+------------------------------------------------------------------------------------------
+     2    Overall     3130    0.739    77.0%    64.4%      70.7%    47.4%    87.0%
+     2       Male     1958    0.718    60.5%    78.4%      69.5%    49.6%    85.0%
+     2     Female     1172    0.781    76.5%    70.4%      73.4%    58.4%    84.6%
+     3    Overall     3130    0.752    67.7%    75.0%      71.3%    53.0%    84.7%
+     3       Male     1958    0.737    82.7%    57.8%      70.3%    40.8%    90.5%
+     3     Female     1172    0.781    76.5%    70.4%      73.4%    58.4%    84.6%
+     4    Overall     3130    0.755    71.9%    71.9%      71.9%    51.7%    86.0%
+     4       Male     1958    0.745    74.3%    71.4%      72.8%    47.7%    88.8%
+     4     Female     1172    0.781    75.8%    72.7%      74.3%    60.2%    84.7%
+     5    Overall     3130    0.750    81.9%    63.8%      72.8%    48.6%    89.4%
+     5       Male     1958    0.733    75.0%    71.6%      73.3%    48.2%    89.1%
+     5     Female     1172    0.775    84.3%    67.5%      75.9%    58.5%    88.7%
+
+Saved: CART_Weighted_Analysis.csv
+
+--- OPTIMAL DEPTH SELECTION ---
+  Overall: Best depth = 4 (AUC = 0.755, Bal Acc = 71.9%)
+  Male: Best depth = 4 (AUC = 0.745, Bal Acc = 72.8%)
+  Female: Best depth = 4 (AUC = 0.781, Bal Acc = 74.3%)
+
+--- CART DECISION RULES (Depth = 3) ---
+
+============================================================
+OVERALL DECISION TREE RULES
+============================================================
+|--- bmi <= 22.7
+|   |--- Age <= 37.5
+|   |   |--- WaistCircumference <= 87.5
+|   |   |   |--- class: 0
+|   |   |--- WaistCircumference >  87.5
+|   |   |   |--- class: 0
+|   |--- Age >  37.5
+|   |   |--- bmi <= 19.9
+|   |   |   |--- class: 0
+|   |   |--- bmi >  19.9
+|   |   |   |--- class: 0
+|--- bmi >  22.7
+|   |--- bmi <= 25.2
+|   |   |--- WaistCircumference <= 89.5
+|   |   |   |--- class: 0
+|   |   |--- WaistCircumference >  89.5
+|   |   |   |--- class: 1
+|   |--- bmi >  25.2
+|   |   |--- WaistCircumference <= 103.5
+|   |   |   |--- class: 1
+|   |   |--- WaistCircumference >  103.5
+|   |   |   |--- class: 1
+
+
+Feature Importance (Overall):
+  bmi                 : 0.8752 (87.5%)
+  WaistCircumference  : 0.0664 (6.6%)
+  Age                 : 0.0583 (5.8%)
+  Diabetes            : 0.0000 (0.0%)
+
+============================================================
+MALE DECISION TREE RULES
+============================================================
+|--- bmi <= 24.8
+|   |--- Age <= 40.5
+|   |   |--- bmi <= 21.8
+|   |   |   |--- class: 0
+|   |   |--- bmi >  21.8
+|   |   |   |--- class: 0
+|   |--- Age >  40.5
+|   |   |--- WaistCircumference <= 71.5
+|   |   |   |--- class: 0
+|   |   |--- WaistCircumference >  71.5
+|   |   |   |--- class: 1
+|--- bmi >  24.8
+|   |--- WaistCircumference <= 93.5
+|   |   |--- WaistCircumference <= 92.5
+|   |   |   |--- class: 1
+|   |   |--- WaistCircumference >  92.5
+|   |   |   |--- class: 0
+|   |--- WaistCircumference >  93.5
+|   |   |--- Age <= 33.5
+|   |   |   |--- class: 1
+|   |   |--- Age >  33.5
+|   |   |   |--- class: 1
+
+
+Feature Importance (Male):
+  bmi                 : 0.7416 (74.2%)
+  Age                 : 0.1583 (15.8%)
+  WaistCircumference  : 0.1002 (10.0%)
+  Diabetes            : 0.0000 (0.0%)
+
+============================================================
+FEMALE DECISION TREE RULES
+============================================================
+|--- bmi <= 22.8
+|   |--- bmi <= 20.7
+|   |   |--- WaistCircumference <= 83.5
+|   |   |   |--- class: 0
+|   |   |--- WaistCircumference >  83.5
+|   |   |   |--- class: 0
+|   |--- bmi >  20.7
+|   |   |--- WaistCircumference <= 86.5
+|   |   |   |--- class: 0
+|   |   |--- WaistCircumference >  86.5
+|   |   |   |--- class: 0
+|--- bmi >  22.8
+|   |--- bmi <= 26.2
+|   |   |--- bmi <= 24.3
+|   |   |   |--- class: 1
+|   |   |--- bmi >  24.3
+|   |   |   |--- class: 1
+|   |--- bmi >  26.2
+|   |   |--- WaistCircumference <= 95.5
+|   |   |   |--- class: 1
+|   |   |--- WaistCircumference >  95.5
+|   |   |   |--- class: 1
+
+
+Feature Importance (Female):
+  bmi                 : 0.9521 (95.2%)
+  WaistCircumference  : 0.0479 (4.8%)
+  Age                 : 0.0000 (0.0%)
+  Diabetes            : 0.0000 (0.0%)
+
+--- Generating CART Decision Tree Visualizations ---
+Saved: CART_Decision_Trees.png
+
+--- CART PERFORMANCE BY FEATURE COMBINATION ---
+
+                         Model     Gender        N      AUC    Sens%    Spec%   Bal Acc%
+-----------------------------------------------------------------------------------------------
+                       WC only    Overall     3130    0.711    68.5%    66.5%      67.5%
+                       WC only       Male     1958    0.713    65.2%    69.4%      67.3%
+                       WC only     Female     1172    0.705    68.3%    66.7%      67.5%
+                      BMI only    Overall     3130    0.753    77.9%    63.7%      70.8%
+                      BMI only       Male     1958    0.725    61.9%    77.6%      69.7%
+                      BMI only     Female     1172    0.791    76.5%    70.4%      73.4%
+                      WC + BMI    Overall     3130    0.749    67.7%    75.0%      71.3%
+                      WC + BMI       Male     1958    0.734    73.5%    68.7%      71.1%
+                      WC + BMI     Female     1172    0.793    76.5%    70.4%      73.4%
+                WC + BMI + Age    Overall     3130    0.752    67.7%    75.0%      71.3%
+                WC + BMI + Age       Male     1958    0.737    82.7%    57.8%      70.3%
+                WC + BMI + Age     Female     1172    0.781    76.5%    70.4%      73.4%
+           WC + BMI + Diabetes    Overall     3130    0.749    67.7%    75.0%      71.3%
+           WC + BMI + Diabetes       Male     1958    0.732    73.5%    68.7%      71.1%
+           WC + BMI + Diabetes     Female     1172    0.790    76.5%    70.4%      73.4%
+     WC + BMI + Age + Diabetes    Overall     3130    0.752    67.7%    75.0%      71.3%
+     WC + BMI + Age + Diabetes       Male     1958    0.737    82.7%    57.8%      70.3%
+     WC + BMI + Age + Diabetes     Female     1172    0.781    76.5%    70.4%      73.4%
+
+Saved: CART_Feature_Combinations.csv
+
+--- CART vs LOGISTIC REGRESSION COMPARISON ---
+
+                    Model     Gender   CART AUC     LR AUC   Difference
+---------------------------------------------------------------------------
+      WC+BMI+Age+Diabetes    Overall      0.752      0.777       -0.025
+      WC+BMI+Age+Diabetes       Male      0.737      0.769       -0.032
+      WC+BMI+Age+Diabetes     Female      0.781      0.801       -0.020
+
+--- CLINICAL INTERPRETATION ---
+CART (Decision Tree) Advantages:
+  1. Easy to interpret: Clear IF-THEN rules for clinical use
+  2. No assumptions about data distribution
+  3. Handles non-linear relationships automatically
+  4. Identifies key decision thresholds (e.g., WC cutoffs)
+
+CART Limitations:
+  1. May overfit with deeper trees
+  2. Less stable than ensemble methods (Random Forest)
+  3. May not capture smooth probability gradients
+
+====================================================================================================
+5.8. WC CUTOFF ANALYSIS: FLD CHANCES BY WAIST CIRCUMFERENCE THRESHOLDS
+     Probability of FLD (CAP ≥ 248) for WC > 80, 85, 90, 95, 100, 105 cm
+====================================================================================================
+
+   WC Cutoff        Group        N     FLD+     FLD-   Prevalence   Odds Ratio             95% CI
+----------------------------------------------------------------------------------------------------
+WC >  80 cm       Overall     1930      751     1179        38.9%         3.83 [3.18-4.62]
+WC >  80 cm          Male     1103      399      704        36.2%         3.84 [3.04-4.85]
+WC >  80 cm        Female      827      352      475        42.6%         3.45 [2.53-4.70]
+WC >  85 cm       Overall     1506      655      851        43.5%         3.91 [3.31-4.62]
+WC >  85 cm          Male      858      345      513        40.2%         3.84 [3.10-4.76]
+WC >  85 cm        Female      648      310      338        47.8%         3.75 [2.88-4.89]
+WC >  90 cm       Overall      990      497      493        50.2%         4.07 [3.45-4.79]
+WC >  90 cm          Male      548      254      294        46.4%         3.91 [3.15-4.86]
+WC >  90 cm        Female      442      243      199        55.0%         4.02 [3.12-5.19]
+WC >  95 cm       Overall      632      363      269        57.4%         4.68 [3.90-5.62]
+WC >  95 cm          Male      346      186      160        53.8%         4.64 [3.63-5.92]
+WC >  95 cm        Female      286      177      109        61.9%         4.47 [3.38-5.93]
+WC > 100 cm       Overall      305      198      107        64.9%         5.37 [4.18-6.89]
+WC > 100 cm          Male      175      107       68        61.1%         5.41 [3.91-7.47]
+WC > 100 cm        Female      130       91       39        70.0%         5.22 [3.51-7.76]
+WC > 105 cm       Overall      155      113       42        72.9%         7.20 [5.01-10.36]
+WC > 105 cm          Male       88       61       27        69.3%         7.17 [4.50-11.42]
+WC > 105 cm        Female       67       52       15        77.6%         7.14 [3.97-12.86]
+
+Saved: WC_Cutoff_FLD_Analysis.csv
+
+--- KEY FINDINGS: WC > 90 cm ---
+  Overall: 50.2% chance of FLD (vs 19.9% for WC≤90), OR=4.07
+  Male: 46.4% chance of FLD (vs 18.1% for WC≤90), OR=3.91
+  Female: 55.0% chance of FLD (vs 23.3% for WC≤90), OR=4.02
+
+--- KEY FINDINGS: WC > 80 cm ---
+  Overall: 38.9% chance of FLD (vs 14.2% for WC≤80), OR=3.83
+  Male: 36.2% chance of FLD (vs 12.9% for WC≤80), OR=3.84
+  Female: 42.6% chance of FLD (vs 17.7% for WC≤80), OR=3.45
+
+====================================================================================================
+5.9. FLD AND FIBROSIS PROBABILITY ANALYSIS
+     FLD: CAP ≥ 248 dB/m | Fibrosis: LSM ≥ 8 kPa (F2+)
+====================================================================================================
+
+           Condition     Gender        N   Positive   Prevalence    Avg CAP    Avg LSM
+------------------------------------------------------------------------------------------
+       FLD (CAP≥248)    Overall     3130        922        29.5%      224.7       4.61
+       FLD (CAP≥248)       Male     1958        509        26.0%      221.0       4.48
+       FLD (CAP≥248)     Female     1172        413        35.2%      231.0       4.83
+    Fibrosis (LSM≥8)    Overall     3130         95         3.0%      224.7       4.61
+    Fibrosis (LSM≥8)       Male     1958         48         2.5%      221.0       4.48
+    Fibrosis (LSM≥8)     Female     1172         47         4.0%      231.0       4.83
+Fibrosis F3+ (LSM≥10)    Overall     3130         39         1.2%      224.7       4.61
+Fibrosis F3+ (LSM≥10)       Male     1958         20         1.0%      221.0       4.48
+Fibrosis F3+ (LSM≥10)     Female     1172         19         1.6%      231.0       4.83
+  Cirrhosis (LSM≥14)    Overall     3130         10         0.3%      224.7       4.61
+  Cirrhosis (LSM≥14)       Male     1958          4         0.2%      221.0       4.48
+  Cirrhosis (LSM≥14)     Female     1172          6         0.5%      231.0       4.83
+
+Saved: FLD_Fibrosis_Prevalence.csv
+
+--- COMBINED OUTCOMES ---
+
+                   Combination     Gender        N    Count   Prevalence
+--------------------------------------------------------------------------------
+        FLD only (no Fibrosis)    Overall     3130      870        27.8%
+        Fibrosis only (no FLD)    Overall     3130       43         1.4%
+           Both FLD + Fibrosis    Overall     3130       52         1.7%
+                       Neither    Overall     3130     2165        69.2%
+--------------------------------------------------------------------------------
+        FLD only (no Fibrosis)       Male     1958      488        24.9%
+        Fibrosis only (no FLD)       Male     1958       27         1.4%
+           Both FLD + Fibrosis       Male     1958       21         1.1%
+                       Neither       Male     1958     1422        72.6%
+--------------------------------------------------------------------------------
+        FLD only (no Fibrosis)     Female     1172      382        32.6%
+        Fibrosis only (no FLD)     Female     1172       16         1.4%
+           Both FLD + Fibrosis     Female     1172       31         2.6%
+                       Neither     Female     1172      743        63.4%
+--------------------------------------------------------------------------------
+
+====================================================================================================
+5.10. BMI-BASED FLD AND FIBROSIS PREDICTIONS
+      FLD/Fibrosis prevalence by BMI categories and cutoffs
+====================================================================================================
+
+  BMI Cutoff     Gender    N>Cut   FLD Prev   Fib Prev     FLD OR     Fib OR
+--------------------------------------------------------------------------------
+BMI >   23     Overall     1381      48.6%       4.3%       5.64       2.12
+BMI >   23        Male      871      42.1%       3.4%       4.85       2.12
+BMI >   23      Female      510      59.6%       5.7%       7.49       2.16
+BMI >   25     Overall      885      56.5%       5.8%       5.61       3.06
+BMI >   25        Male      587      50.6%       4.1%       5.60       2.39
+BMI >   25      Female      298      68.1%       9.1%       6.76       4.25
+BMI > 27.5     Overall      451      62.7%       7.3%       5.38       3.33
+BMI > 27.5        Male      313      56.5%       5.8%       5.15       3.28
+BMI > 27.5      Female      138      76.8%      10.9%       7.84       3.82
+BMI >   30     Overall      198      67.2%       9.1%       5.56       3.71
+BMI >   30        Male      140      62.1%       6.4%       5.43       3.13
+BMI >   30      Female       58      79.3%      15.5%       7.80       5.20
+BMI >   35     Overall       34      70.6%      14.7%       5.87       5.76
+BMI >   35        Male       25      64.0%      12.0%       5.19       5.72
+
+Saved: BMI_FLD_Fibrosis_Analysis.csv
+
+--- BMI CATEGORIES (WHO Asian Criteria) ---
+
+            Category       BMI Range     Gender        N     FLD%  Fibrosis%
+--------------------------------------------------------------------------------
+         Underweight          0-18.5    Overall      528     8.3%       1.9%
+         Underweight          0-18.5       Male      360     9.2%       1.1%
+         Underweight          0-18.5     Female      168     6.5%       3.6%
+              Normal         18.5-23    Overall     1220    17.0%       2.1%
+              Normal         18.5-23       Male      726    15.0%       1.9%
+              Normal         18.5-23     Female      494    19.8%       2.4%
+          Overweight         23-27.5    Overall      931    41.7%       2.8%
+          Overweight         23-27.5       Male      559    34.0%       2.1%
+          Overweight         23-27.5     Female      372    53.2%       3.8%
+             Obese I       27.5-32.5    Overall      369    62.1%       6.8%
+             Obese I       27.5-32.5       Male      249    55.4%       5.2%
+             Obese I       27.5-32.5     Female      120    75.8%      10.0%
+            Obese II           ≥32.5    Overall       82    65.9%       9.8%
+            Obese II           ≥32.5       Male       64    60.9%       7.8%
+            Obese II           ≥32.5     Female       18    83.3%      16.7%
+
+====================================================================================================
+5.11. RISK FACTOR COMBINATIONS ANALYSIS
+      FLD/Fibrosis risk with combined risk factors
+====================================================================================================
+
+                   Risk Combination     Gender        N     FLD%     Fib%    Both%
+------------------------------------------------------------------------------------------
+                       High WC only    Overall     1375    44.1%     4.7%     3.2%
+                       High WC only       Male      548    46.4%     4.6%     3.1%
+                       High WC only     Female      827    42.6%     4.7%     3.3%
+                      High BMI only    Overall      885    56.5%     5.8%     4.7%
+                      High BMI only       Male      587    50.6%     4.1%     2.9%
+                      High BMI only     Female      298    68.1%     9.1%     8.4%
+                      Diabetes only    Overall      697    37.2%     4.3%     3.4%
+                      Diabetes only       Male      443    35.0%     2.9%     2.5%
+                      Diabetes only     Female      254    40.9%     6.7%     5.1%
+                 High WC + High BMI    Overall      654    59.9%     6.9%     5.8%
+                 High WC + High BMI       Male      384    53.4%     5.5%     4.2%
+                 High WC + High BMI     Female      270    69.3%     8.9%     8.1%
+                 High WC + Diabetes    Overall      351    51.3%     6.8%     5.7%
+                 High WC + Diabetes       Male      160    54.4%     5.0%     5.0%
+                 High WC + Diabetes     Female      191    48.7%     8.4%     6.3%
+                High BMI + Diabetes    Overall      251    60.2%     9.2%     8.0%
+                High BMI + Diabetes       Male      170    56.5%     5.3%     4.7%
+                High BMI + Diabetes     Female       81    67.9%    17.3%    14.8%
+      High WC + High BMI + Diabetes    Overall      180    63.3%    11.1%    10.0%
+      High WC + High BMI + Diabetes       Male      104    59.6%     6.7%     6.7%
+      High WC + High BMI + Diabetes     Female       76    68.4%    17.1%    14.5%
+                 High WC + Age > 45    Overall      666    49.4%     6.3%     4.4%
+                 High WC + Age > 45       Male      262    55.3%     5.7%     3.8%
+                 High WC + Age > 45     Female      404    45.5%     6.7%     4.7%
+                 All 4 Risk Factors    Overall      102    68.6%    12.7%    11.8%
+                 All 4 Risk Factors       Male       58    65.5%     5.2%     5.2%
+                 All 4 Risk Factors     Female       44    72.7%    22.7%    20.5%
+                    No Risk Factors    Overall     1249    13.3%     1.8%     0.2%
+                    No Risk Factors       Male      990    13.0%     1.7%     0.1%
+                    No Risk Factors     Female      259    14.3%     1.9%     0.4%
+
+Saved: Risk_Factor_Combinations.csv
+
+--- INCREMENTAL RISK BY NUMBER OF RISK FACTORS ---
+
+ # Risk Factors     Gender        N       FLD%  Fibrosis%
+------------------------------------------------------------
+              0    Overall      867      11.2%       1.3%
+              0       Male      692      10.3%       1.3%
+              0     Female      175      14.9%       1.1%
+              1    Overall      946      20.7%       2.2%
+              1       Male      572      19.2%       2.1%
+              1     Female      374      23.0%       2.4%
+              2    Overall      775      39.9%       2.7%
+              2       Male      399      38.6%       2.0%
+              2     Female      376      41.2%       3.5%
+              3    Overall      440      56.8%       6.6%
+              3       Male      237      57.4%       6.8%
+              3     Female      203      56.2%       6.4%
+              4    Overall      102      68.6%      12.7%
+              4       Male       58      65.5%       5.2%
+              4     Female       44      72.7%      22.7%
+
+====================================================================================================
+5.12. FIBROSCAN PREDICTABILITY ANALYSIS
+      Can we predict who needs Fibroscan based on clinical parameters?
+====================================================================================================
+
+                  Outcome     Gender      AUC             95% CI    Sens%    Spec%     PPV%     NPV%
+--------------------------------------------------------------------------------------------------------------
+            FLD (CAP≥248)    Overall    0.777 [0.763-0.791]    75.5%    68.4%    49.9%    87.0%
+            FLD (CAP≥248)       Male    0.769 [0.753-0.785]    76.4%    66.4%    44.4%    88.9%
+            FLD (CAP≥248)     Female    0.801 [0.775-0.826]    76.8%    71.5%    59.5%    85.0%
+         Fibrosis (LSM≥8)    Overall    0.658 [0.614-0.703]    81.1%    46.3%     4.5%    98.7%
+         Fibrosis (LSM≥8)       Male    0.634 [0.563-0.705]    75.0%    55.2%     4.0%    98.9%
+         Fibrosis (LSM≥8)     Female    0.640 [0.543-0.737]    42.6%    87.4%    12.3%    97.3%
+            Any Pathology    Overall    0.769 [0.759-0.780]    74.4%    67.6%    50.6%    85.6%
+            Any Pathology       Male    0.764 [0.740-0.789]    75.2%    66.6%    45.9%    87.7%
+            Any Pathology     Female    0.790 [0.774-0.805]    72.3%    72.9%    60.7%    82.0%
+
+Saved: Fibroscan_Predictability.csv
+
+--- CLINICAL DECISION SUMMARY ---
+Who should get Fibroscan screening?
+
+Based on WC + BMI + Age + Diabetes model:
+
+  Overall:
+    - AUC: 0.769 (ability to discriminate)
+    - Sensitivity: 74.4% (catch rate for pathology)
+    - Specificity: 67.6% (rule-out rate for healthy)
+    - NPV: 85.6% (if screen negative, 85.6% truly healthy)
+
+  Male:
+    - AUC: 0.764 (ability to discriminate)
+    - Sensitivity: 75.2% (catch rate for pathology)
+    - Specificity: 66.6% (rule-out rate for healthy)
+    - NPV: 87.7% (if screen negative, 87.7% truly healthy)
+
+  Female:
+    - AUC: 0.790 (ability to discriminate)
+    - Sensitivity: 72.3% (catch rate for pathology)
+    - Specificity: 72.9% (rule-out rate for healthy)
+    - NPV: 82.0% (if screen negative, 82.0% truly healthy)
+
+====================================================================================================
+5.13. COMBINED FLD + FIBROSIS PREDICTABILITY
+      Predicting patients with BOTH FLD and Fibrosis (high-risk group)
+====================================================================================================
+
+                         Model     Gender      N   Prev%     AUC   Sens%   Spec%    PPV%    NPV%
+---------------------------------------------------------------------------------------------------------
+                       WC only    Overall   3130    1.7%   0.756   63.5%   75.6%    4.2%   99.2%
+                       WC only       Male   1958    1.1%   0.785   76.2%   78.3%    3.7%   99.7%
+                       WC only     Female   1172    2.6%   0.696   45.2%   85.5%    7.8%   98.3%
+                      BMI only    Overall   3130    1.7%   0.798   80.8%   72.9%    4.8%   99.6%
+                      BMI only       Male   1958    1.1%   0.782   81.0%   70.9%    2.9%   99.7%
+                      BMI only     Female   1172    2.6%   0.818   77.4%   81.4%   10.2%   99.3%
+                      WC + BMI    Overall   3130    1.7%   0.780   76.9%   73.3%    4.6%   99.5%
+                      WC + BMI       Male   1958    1.1%   0.801   71.4%   85.8%    5.2%   99.6%
+                      WC + BMI     Female   1172    2.6%   0.814   77.4%   80.3%    9.6%   99.2%
+                WC + BMI + Age    Overall   3130    1.7%   0.799   92.3%   57.5%    3.5%   99.8%
+                WC + BMI + Age       Male   1958    1.1%   0.828   95.2%   67.5%    3.1%   99.9%
+                WC + BMI + Age     Female   1172    2.6%   0.816   80.6%   73.9%    7.7%   99.3%
+           WC + BMI + Diabetes    Overall   3130    1.7%   0.790   84.6%   67.6%    4.2%   99.6%
+           WC + BMI + Diabetes       Male   1958    1.1%   0.824   90.5%   72.8%    3.5%   99.9%
+           WC + BMI + Diabetes     Female   1172    2.6%   0.812   80.6%   77.1%    8.7%   99.3%
+     WC + BMI + Age + Diabetes    Overall   3130    1.7%   0.803   71.2%   81.2%    6.0%   99.4%
+     WC + BMI + Age + Diabetes       Male   1958    1.1%   0.838   90.5%   73.2%    3.5%   99.9%
+     WC + BMI + Age + Diabetes     Female   1172    2.6%   0.805   80.6%   71.5%    7.1%   99.3%
+
+Saved: Combined_FLD_Fibrosis_Prediction.csv
+
+--- HIGH-RISK GROUP (FLD + Fibrosis) SUMMARY ---
+
+  Overall (n=3130):
+    - Prevalence of FLD+Fibrosis: 1.7%
+    - Best model (WC+BMI+Age+Diabetes) AUC: 0.803
+    - Sensitivity: 71.2%, Specificity: 81.2%
+
+  Male (n=1958):
+    - Prevalence of FLD+Fibrosis: 1.1%
+    - Best model (WC+BMI+Age+Diabetes) AUC: 0.838
+    - Sensitivity: 90.5%, Specificity: 73.2%
+
+  Female (n=1172):
+    - Prevalence of FLD+Fibrosis: 2.6%
+    - Best model (WC+BMI+Age+Diabetes) AUC: 0.805
+    - Sensitivity: 80.6%, Specificity: 71.5%
+
+====================================================================================================
+6. COMPREHENSIVE MODEL PERFORMANCE (CLASS-BALANCED)
+   All predictor combinations stratified by gender
+   Using class_weight='balanced' and threshold that balances Sensitivity ≈ Specificity
+   Outcome: CAP ≥ 248 dB/m
+====================================================================================================
+
+Class Distribution:
+  Overall: FLD+ = 922 (29.5%), FLD- = 2208 (70.5%)
+  Male: FLD+ = 509 (26.0%), FLD- = 1449 (74.0%)
+  Female: FLD+ = 413 (35.2%), FLD- = 759 (64.8%)
+
+--- MALE (n=1958, FLD Prevalence=26.0%) ---
+
+Model                          AUC             95% CI     Sens     Spec  Bal Acc       F1     Bias
+---------------------------------------------------------------------------------------------------------
+WC                           0.715      [0.688-0.740]    65.8%    67.8%    66.8%   0.511   +0.149
+BMI                          0.745      [0.718-0.771]    69.2%    69.2%    69.2%   0.538   +0.148
+WC+BMI                       0.752      [0.724-0.778]    70.3%    70.3%    70.3%   0.552   +0.142
+WC+Age                       0.741      [0.715-0.764]    67.8%    67.8%    67.8%   0.522   +0.155
+WC+Diabetes                  0.721      [0.692-0.746]    66.8%    67.2%    67.0%   0.514   +0.156
+BMI+Diabetes                 0.748      [0.721-0.774]    70.1%    70.0%    70.1%   0.549   +0.145
+WC+BMI+Diabetes              0.754      [0.727-0.780]    70.1%    70.1%    70.1%   0.550   +0.144
+WC+Age+Diabetes              0.743      [0.716-0.767]    68.6%    68.6%    68.6%   0.532   +0.151
+WC+Age+BMI+Diabetes          0.771      [0.747-0.795]    70.9%    71.0%    71.0%   0.560   +0.139
+
+--- FEMALE (n=1172, FLD Prevalence=35.2%) ---
+
+Model                          AUC             95% CI     Sens     Spec  Bal Acc       F1     Bias
+---------------------------------------------------------------------------------------------------------
+WC                           0.719      [0.689-0.750]    68.3%    66.7%    67.5%   0.595   +0.104
+BMI                          0.802      [0.776-0.828]    73.1%    73.3%    73.2%   0.658   +0.078
+WC+BMI                       0.804      [0.778-0.828]    73.8%    73.8%    73.8%   0.665   +0.078
+WC+Age                       0.721      [0.690-0.752]    67.3%    67.5%    67.4%   0.593   +0.096
+WC+Diabetes                  0.719      [0.688-0.752]    67.8%    67.5%    67.6%   0.596   +0.097
+BMI+Diabetes                 0.802      [0.777-0.828]    73.4%    73.3%    73.3%   0.659   +0.079
+WC+BMI+Diabetes              0.804      [0.778-0.828]    74.1%    73.9%    74.0%   0.667   +0.078
+WC+Age+Diabetes              0.721      [0.691-0.753]    66.6%    66.7%    66.6%   0.584   +0.098
+WC+Age+BMI+Diabetes          0.806      [0.781-0.830]    73.1%    73.1%    73.1%   0.657   +0.079
+
+Saved: Comprehensive_Model_Performance_CAP248.csv
+
+--- BIAS ANALYSIS ---
+Bias Indicator = Predicted Positive Rate - Actual Prevalence
+Values close to 0 indicate unbiased predictions
+
+Bias Summary by Model (averaged across genders):
+  WC                       : Avg Bias = +0.1266, Avg Balanced Acc = 0.672
+  BMI                      : Avg Bias = +0.1133, Avg Balanced Acc = 0.712
+  WC+BMI                   : Avg Bias = +0.1101, Avg Balanced Acc = 0.721
+  WC+Age                   : Avg Bias = +0.1252, Avg Balanced Acc = 0.676
+  WC+Diabetes              : Avg Bias = +0.1268, Avg Balanced Acc = 0.673
+  BMI+Diabetes             : Avg Bias = +0.1119, Avg Balanced Acc = 0.717
+  WC+BMI+Diabetes          : Avg Bias = +0.1106, Avg Balanced Acc = 0.721
+  WC+Age+Diabetes          : Avg Bias = +0.1244, Avg Balanced Acc = 0.676
+  WC+Age+BMI+Diabetes      : Avg Bias = +0.1091, Avg Balanced Acc = 0.720
+
+====================================================================================================
+7. MODEL PERFORMANCE AT INCREMENTAL CAP THRESHOLDS
+   CAP thresholds: 248, 260, 270, 280, 290, 300 dB/m
+====================================================================================================
+
+--- CAP Threshold: 248 dB/m ---
+Overall FLD Prevalence: 29.5%
+
+  Male (FLD Prevalence: 26.0%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.771)
+
+  Female (FLD Prevalence: 35.2%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.806)
+
+--- CAP Threshold: 260 dB/m ---
+Overall FLD Prevalence: 23.4%
+
+  Male (FLD Prevalence: 20.3%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.776)
+
+  Female (FLD Prevalence: 28.5%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.804)
+
+--- CAP Threshold: 270 dB/m ---
+Overall FLD Prevalence: 19.0%
+
+  Male (FLD Prevalence: 16.6%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.777)
+
+  Female (FLD Prevalence: 23.1%):
+    Best Model: WC+BMI+Diabetes (AUC = 0.804)
+
+--- CAP Threshold: 280 dB/m ---
+Overall FLD Prevalence: 15.6%
+
+  Male (FLD Prevalence: 13.5%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.775)
+
+  Female (FLD Prevalence: 19.1%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.797)
+
+--- CAP Threshold: 290 dB/m ---
+Overall FLD Prevalence: 12.4%
+
+  Male (FLD Prevalence: 10.2%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.761)
+
+  Female (FLD Prevalence: 16.0%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.794)
+
+--- CAP Threshold: 300 dB/m ---
+Overall FLD Prevalence: 9.9%
+
+  Male (FLD Prevalence: 8.1%):
+    Best Model: WC+Age+BMI+Diabetes (AUC = 0.753)
+
+  Female (FLD Prevalence: 12.9%):
+    Best Model: BMI+Diabetes (AUC = 0.789)
+
+Saved: Model_Performance_Incremental_CAP.csv
+
+====================================================================================================
+7.5 ESTABLISHED LIVER DISEASE SCORES
+   Calculating: APRI, FIB-4, FAST, AGILE 3+, BARD, FLI
+====================================================================================================
+
+Available variables for score calculation:
+  AST: 'ast' (n=3113 non-missing)
+  ALT: 'alt' (n=3113 non-missing)
+  Platelet: 'plt' (n=3107 non-missing)
+  GGT: 'ggt' (n=3075 non-missing)
+  Albumin: 'alb' (n=3109 non-missing)
+  Triglycerides: 'tg' (n=3110 non-missing)
+
+1. APRI Score calculated:
+   Formula: (AST/40) × 100 / Platelet
+   Range: 0.05 - 5.07
+   Cutoffs: <0.5 (low risk), 0.5-1.5 (intermediate), >1.5 (high risk)
+
+2. FIB-4 Score calculated:
+   Formula: (Age × AST) / (Platelet × √ALT)
+   Range: 0.11 - 10.98
+   Cutoffs: <1.3 (low risk), 1.3-2.67 (intermediate), >2.67 (high risk)
+
+3. FAST Score calculated:
+   Formula: exp(x)/(1+exp(x)) where x = -1.65 + 1.07×ln(LSM) + 2.66×10⁻⁸×CAP³ - 63.3/AST
+   Range: 0.000 - 0.837
+   Cutoffs: <0.35 (rule-out), >0.67 (rule-in) for NASH with fibrosis
+
+4. AGILE 3+ Score calculated:
+   Range: 0.000 - 0.080
+   Cutoffs: <0.451 (rule-out), >0.679 (rule-in) for ≥F3
+
+5. BARD Score calculated:
+   Formula: BMI≥28 (1pt) + AST/ALT≥0.8 (2pts) + Diabetes (1pt)
+   Range: 0 - 4
+   Cutoffs: 0-1 (low risk), 2-4 (high risk for advanced fibrosis)
+
+6. FLI (Fatty Liver Index) calculated:
+   Formula: 100 × e^y/(1+e^y) where y = 0.953×ln(TG) + 0.139×BMI + 0.718×ln(GGT) + 0.053×WC - 15.745
+   Range: 0.3 - 98.1
+   Cutoffs: <30 (rule-out), ≥60 (rule-in) for fatty liver
+
+Successfully calculated 6 scores: ['APRI', 'FIB4', 'FAST', 'AGILE3Plus', 'BARD', 'FLI']
+
+====================================================================================================
+7.6 CUSTOM PREDICTION MODEL
+   Model: BMI + WC + Gender + AST + ALT + Platelet
+====================================================================================================
+
+Custom model features: ['bmi', 'WaistCircumference', 'Gender', 'ast', 'alt', 'plt']
+Samples with complete data: 3103
+
+Male:
+  AUC: 0.752 (95% CI: 0.727-0.778)
+  Sensitivity: 70.2%
+  Specificity: 70.2%
+  PPV: 45.3%
+  NPV: 87.0%
+  Balanced Accuracy: 70.2%
+  F1 Score: 0.551
+  Optimal Threshold: 0.496
+
+Female:
+  AUC: 0.818 (95% CI: 0.793-0.842)
+  Sensitivity: 74.9%
+  Specificity: 75.1%
+  PPV: 62.0%
+  NPV: 84.6%
+  Balanced Accuracy: 75.0%
+  F1 Score: 0.678
+  Optimal Threshold: 0.493
+
+Overall:
+  AUC: 0.780 (95% CI: 0.763-0.798)
+  Sensitivity: 72.3%
+  Specificity: 72.3%
+  PPV: 52.2%
+  NPV: 86.2%
+  Balanced Accuracy: 72.3%
+  F1 Score: 0.606
+  Optimal Threshold: 0.505
+
+====================================================================================================
+7.7 COMPREHENSIVE SCORE COMPARISON (CLASS-BALANCED)
+   Comparing established scores with our models for FLD prediction
+   Using thresholds that balance Sensitivity ≈ Specificity
+====================================================================================================
+
+--- Comparison at CAP ≥ 248 dB/m ---
+
+Model/Score                              Gender          AUC     Sens     Spec      PPV      NPV  Bal Acc       F1
+------------------------------------------------------------------------------------------------------------------------
+WC alone                                 Male          0.715    65.8%    67.8%    41.8%    85.0%    66.8%   0.511
+BMI alone                                Male          0.745    69.2%    69.2%    44.1%    86.5%    69.2%   0.538
+WC + BMI                                 Male          0.752    70.3%    70.3%    45.4%    87.1%    70.3%   0.552
+WC + BMI + Age                           Male          0.770    70.7%    70.9%    46.0%    87.3%    70.8%   0.558
+WC + BMI + Diabetes                      Male          0.754    70.1%    70.1%    45.2%    87.0%    70.1%   0.550
+WC + BMI + Age + Diabetes                Male          0.771    70.9%    71.0%    46.2%    87.4%    71.0%   0.560
+Custom (BMI+WC+Gender+AST+ALT+PLT)       Male          0.752    70.2%    70.2%    45.3%    87.0%    70.2%   0.551
+APRI                                     Male          0.511    51.4%    51.4%    27.1%    75.1%    51.4%   0.355
+FIB4                                     Male          0.570    55.0%    54.9%    30.0%    77.6%    54.9%   0.388
+FAST                                     Male          0.719    66.6%    66.5%    41.1%    85.0%    66.6%   0.509
+AGILE3Plus                               Male          0.587    55.6%    55.7%    30.6%    78.1%    55.6%   0.394
+BARD                                     Male          0.609    44.4%    77.6%    41.0%    79.9%    61.0%   0.426
+FLI                                      Male          0.763    70.9%    70.7%    46.2%    87.2%    70.8%   0.560
+------------------------------------------------------------------------------------------------------------------------
+WC alone                                 Female        0.719    68.3%    66.7%    52.7%    79.4%    67.5%   0.595
+BMI alone                                Female        0.802    73.1%    73.3%    59.8%    83.4%    73.2%   0.658
+WC + BMI                                 Female        0.804    73.8%    73.8%    60.5%    83.8%    73.8%   0.665
+WC + BMI + Age                           Female        0.806    73.1%    73.1%    59.7%    83.3%    73.1%   0.657
+WC + BMI + Diabetes                      Female        0.804    74.1%    73.9%    60.7%    84.0%    74.0%   0.667
+WC + BMI + Age + Diabetes                Female        0.806    73.1%    73.1%    59.7%    83.3%    73.1%   0.657
+Custom (BMI+WC+Gender+AST+ALT+PLT)       Female        0.818    74.9%    75.1%    62.0%    84.6%    75.0%   0.678
+APRI                                     Female        0.544    53.0%    53.2%    38.2%    67.5%    53.1%   0.444
+FIB4                                     Female        0.515    51.5%    51.6%    36.6%    66.2%    51.5%   0.428
+FAST                                     Female        0.760    68.4%    68.4%    54.1%    79.9%    68.4%   0.605
+AGILE3Plus                               Female        0.531    53.4%    53.3%    38.4%    67.8%    53.4%   0.446
+BARD                                     Female        0.519    31.5%    81.3%    47.8%    68.6%    56.4%   0.380
+FLI                                      Female        0.787    72.8%    72.7%    59.3%    83.0%    72.7%   0.653
+------------------------------------------------------------------------------------------------------------------------
+WC alone                                 Overall       0.721    66.3%    67.3%    45.8%    82.7%    66.8%   0.542
+BMI alone                                Overall       0.764    70.4%    70.3%    49.8%    85.0%    70.4%   0.583
+WC + BMI                                 Overall       0.770    71.4%    71.3%    51.0%    85.6%    71.3%   0.595
+WC + BMI + Age                           Overall       0.778    71.0%    71.1%    50.7%    85.5%    71.1%   0.591
+WC + BMI + Diabetes                      Overall       0.771    71.0%    70.9%    50.5%    85.4%    71.0%   0.590
+WC + BMI + Age + Diabetes                Overall       0.778    71.0%    71.0%    50.6%    85.4%    71.0%   0.591
+Custom (BMI+WC+Gender+AST+ALT+PLT)       Overall       0.780    72.3%    72.3%    52.2%    86.2%    72.3%   0.606
+APRI                                     Overall       0.535    53.1%    53.1%    32.1%    73.1%    53.1%   0.400
+FIB4                                     Overall       0.550    53.6%    53.7%    32.6%    73.5%    53.6%   0.405
+FAST                                     Overall       0.740    68.3%    68.4%    47.5%    83.8%    68.3%   0.560
+AGILE3Plus                               Overall       0.582    55.4%    55.4%    34.1%    74.8%    55.4%   0.422
+BARD                                     Overall       0.567    38.6%    78.8%    43.3%    75.5%    58.7%   0.408
+FLI                                      Overall       0.776    71.6%    71.7%    51.6%    85.7%    71.7%   0.600
+------------------------------------------------------------------------------------------------------------------------
+
+Saved: Score_Comparison_CAP248.csv
+
+--- BIAS ANALYSIS SUMMARY ---
+Comparing prediction bias across model types:
+
+Our Models (avg across all):
+  Mean Bias: +0.1151
+  Mean Balanced Accuracy: 0.710
+  Mean F1 Score: 0.595
+
+Established Scores (avg across all):
+  Mean Bias: +0.1242
+  Mean Balanced Accuracy: 0.598
+  Mean F1 Score: 0.466
+
+====================================================================================================
+7.8 SCORE PERFORMANCE ACROSS CAP THRESHOLDS (230-300)
+   Using class-balanced models with Sensitivity ≈ Specificity thresholds
+   TABULAR VIEW: All models and metrics at each CAP threshold
+====================================================================================================
+
+Saved: Score_Performance_CAP_Range.csv
+
+============================================================================================================================================
+TABULAR VIEW: OVERALL - All Models Across CAP Thresholds
+============================================================================================================================================
+
+Model                          Type         CAP230 CAP240 CAP250 CAP260 CAP270 CAP280 CAP290 CAP300   Best_CAP
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+--- AUC VALUES ---
+Model                          Type            230    240    250    260    270    280    290    300   Best
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model     0.726  0.724  0.721  0.724  0.723  0.717  0.713  0.694   230
+BMI alone                      Our Model     0.768  0.769  0.765  0.762  0.759  0.753  0.746  0.737   240
+WC + BMI                       Our Model     0.775  0.775  0.771  0.769  0.767  0.760  0.753  0.741   240
+WC + BMI + Age                 Our Model     0.782  0.784  0.780  0.778  0.775  0.768  0.761  0.748   240
+WC + BMI + Diabetes            Our Model     0.775  0.776  0.773  0.770  0.769  0.764  0.758  0.747   240
+WC + BMI + Age + Diabetes      Our Model     0.782  0.784  0.780  0.779  0.776  0.771  0.764  0.753   240
+APRI                           Establishe    0.525  0.529  0.536  0.538  0.543  0.553  0.560  0.560   300
+FIB4                           Establishe    0.546  0.553  0.552  0.551  0.556  0.565  0.569  0.567   290
+FAST                           Establishe    0.709  0.721  0.744  0.753  0.769  0.783  0.804  0.818   300
+AGILE3Plus                     Establishe    0.571  0.577  0.585  0.589  0.597  0.612  0.623  0.629   300
+BARD                           Establishe    0.558  0.566  0.575  0.578  0.577  0.583  0.587  0.588   300
+FLI                            Establishe    0.779  0.779  0.777  0.776  0.776  0.767  0.765  0.753   230
+
+--- SENSITIVITY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      68.1   68.0   66.5   68.4   66.3   67.0   66.9   65.0   67.0
+BMI alone                      Our Model      70.8   70.9   70.5   70.2   70.5   70.3   70.3   69.3   70.3
+WC + BMI                       Our Model      71.1   71.6   71.4   70.8   71.0   70.5   70.0   68.9   70.7
+WC + BMI + Age                 Our Model      71.6   72.1   71.4   71.2   71.0   70.7   70.3   69.9   71.0
+WC + BMI + Diabetes            Our Model      71.4   71.5   71.3   70.9   71.0   71.7   71.8   70.9   71.3
+WC + BMI + Age + Diabetes      Our Model      71.5   72.1   71.4   71.2   71.3   71.1   70.5   70.2   71.2
+APRI                           Establishe     51.9   52.3   53.2   53.3   53.9   54.7   54.8   54.7   53.6
+FIB4                           Establishe     53.0   53.9   53.8   54.2   54.8   55.4   55.7   56.0   54.6
+FAST                           Establishe     66.0   66.6   68.9   70.3   72.1   72.6   74.4   75.3   70.8
+AGILE3Plus                     Establishe     55.1   55.2   55.5   56.4   57.4   58.3   58.3   59.0   56.9
+BARD                           Establishe     35.3   37.5   39.6   41.3   42.4   44.5   46.5   47.6   41.8
+FLI                            Establishe     72.3   72.1   71.6   71.3   71.0   70.4   70.7   69.7   71.1
+
+--- SPECIFICITY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      65.7   66.9   66.8   65.3   67.4   66.2   65.0   63.9   65.9
+BMI alone                      Our Model      70.8   70.8   70.4   70.1   70.5   70.2   70.2   69.3   70.3
+WC + BMI                       Our Model      71.0   71.6   71.4   70.7   71.0   70.6   69.9   69.1   70.6
+WC + BMI + Age                 Our Model      71.5   72.1   71.3   71.2   71.0   70.7   70.5   69.9   71.0
+WC + BMI + Diabetes            Our Model      71.4   71.5   71.2   71.0   70.9   71.6   71.7   70.8   71.3
+WC + BMI + Age + Diabetes      Our Model      71.5   72.0   71.4   71.3   71.4   71.0   70.5   70.3   71.2
+APRI                           Establishe     52.0   52.4   53.2   53.3   53.8   54.6   54.7   54.7   53.6
+FIB4                           Establishe     53.1   53.9   53.8   54.2   54.8   55.4   55.8   55.9   54.6
+FAST                           Establishe     65.9   66.7   68.8   70.3   72.2   72.6   74.3   75.3   70.7
+AGILE3Plus                     Establishe     55.2   55.2   55.6   56.4   57.4   58.2   58.4   59.0   56.9
+BARD                           Establishe     79.9   79.6   79.0   78.3   77.5   77.1   76.6   76.0   78.0
+FLI                            Establishe     72.3   72.1   71.5   71.4   71.1   70.0   70.6   69.8   71.1
+
+--- BALANCED ACCURACY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      66.9   67.4   66.7   66.9   66.9   66.6   65.9   64.5   66.5
+BMI alone                      Our Model      70.8   70.9   70.4   70.2   70.5   70.3   70.2   69.3   70.3
+WC + BMI                       Our Model      71.1   71.6   71.4   70.7   71.0   70.5   70.0   69.0   70.7
+WC + BMI + Age                 Our Model      71.5   72.1   71.3   71.2   71.0   70.7   70.4   69.9   71.0
+WC + BMI + Diabetes            Our Model      71.4   71.5   71.2   70.9   70.9   71.7   71.8   70.8   71.3
+WC + BMI + Age + Diabetes      Our Model      71.5   72.0   71.4   71.2   71.3   71.1   70.5   70.3   71.2
+APRI                           Establishe     51.9   52.4   53.2   53.3   53.9   54.6   54.7   54.7   53.6
+FIB4                           Establishe     53.0   53.9   53.8   54.2   54.8   55.4   55.8   55.9   54.6
+FAST                           Establishe     65.9   66.7   68.8   70.3   72.1   72.6   74.3   75.3   70.8
+AGILE3Plus                     Establishe     55.1   55.2   55.6   56.4   57.4   58.2   58.4   59.0   56.9
+BARD                           Establishe     57.6   58.6   59.3   59.8   60.0   60.8   61.5   61.8   59.9
+FLI                            Establishe     72.3   72.1   71.6   71.3   71.1   70.2   70.7   69.8   71.1
+
+--- PPV / POSITIVE PREDICTIVE VALUE (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      58.0   51.9   44.2   37.6   32.4   26.8   21.2   16.5   36.1
+BMI alone                      Our Model      62.8   56.1   48.5   41.8   36.0   30.4   25.0   19.8   40.0
+WC + BMI                       Our Model      63.0   56.9   49.6   42.4   36.5   30.7   24.7   19.6   40.4
+WC + BMI + Age                 Our Model      63.5   57.6   49.6   43.0   36.6   30.8   25.1   20.3   40.8
+WC + BMI + Diabetes            Our Model      63.4   56.8   49.5   42.7   36.5   31.8   26.4   21.0   41.0
+WC + BMI + Age + Diabetes      Our Model      63.5   57.5   49.7   43.1   37.0   31.2   25.2   20.6   41.0
+APRI                           Establishe     42.9   36.6   31.0   25.8   21.5   18.2   14.6   11.7   25.3
+FIB4                           Establishe     43.9   38.1   31.5   26.5   22.1   18.6   15.1   12.2   26.0
+FAST                           Establishe     57.3   51.3   46.7   41.9   37.8   32.8   29.0   25.1   40.2
+AGILE3Plus                     Establishe     46.0   39.3   33.1   28.3   24.0   20.4   16.5   13.7   27.7
+BARD                           Establishe     54.9   49.1   42.6   36.7   30.7   26.4   21.9   17.9   35.0
+FLI                            Establishe     64.6   57.8   50.1   43.4   36.8   30.4   25.6   20.5   41.1
+
+--- NPV / NEGATIVE PREDICTIVE VALUE (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      74.8   79.9   83.5   87.1   89.5   91.6   93.3   94.3   86.8
+BMI alone                      Our Model      77.8   82.3   85.8   88.5   91.0   92.8   94.4   95.4   88.5
+WC + BMI                       Our Model      78.0   82.8   86.3   88.8   91.2   92.8   94.3   95.3   88.7
+WC + BMI + Age                 Our Model      78.4   83.2   86.3   89.0   91.2   92.9   94.4   95.5   88.9
+WC + BMI + Diabetes            Our Model      78.2   82.7   86.2   88.9   91.2   93.2   94.8   95.7   88.9
+WC + BMI + Age + Diabetes      Our Model      78.3   83.1   86.3   89.0   91.4   93.0   94.4   95.6   88.9
+APRI                           Establishe     60.9   67.6   74.2   78.9   83.3   86.7   89.5   91.7   79.1
+FIB4                           Establishe     62.0   69.0   74.7   79.5   83.8   87.1   89.9   92.0   79.8
+FAST                           Establishe     73.6   79.2   84.8   88.6   91.7   93.5   95.3   96.5   87.9
+AGILE3Plus                     Establishe     63.9   70.1   76.0   80.9   85.2   88.4   90.9   92.9   81.0
+BARD                           Establishe     64.0   70.8   76.8   81.4   85.1   88.3   91.0   93.0   81.3
+FLI                            Establishe     78.9   83.0   86.3   89.0   91.2   92.7   94.4   95.4   88.9
+
+============================================================================================================================================
+TABULAR VIEW: MALE - All Models Across CAP Thresholds
+============================================================================================================================================
+
+Model                          Type         CAP230 CAP240 CAP250 CAP260 CAP270 CAP280 CAP290 CAP300   Best_CAP
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+--- AUC VALUES ---
+Model                          Type            230    240    250    260    270    280    290    300   Best
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model     0.723  0.716  0.719  0.722  0.724  0.723  0.706  0.689   270
+BMI alone                      Our Model     0.755  0.749  0.748  0.741  0.735  0.729  0.718  0.703   230
+WC + BMI                       Our Model     0.762  0.756  0.755  0.751  0.748  0.743  0.728  0.712   230
+WC + BMI + Age                 Our Model     0.777  0.772  0.774  0.774  0.776  0.770  0.757  0.747   230
+WC + BMI + Diabetes            Our Model     0.763  0.757  0.759  0.755  0.751  0.751  0.737  0.724   230
+WC + BMI + Age + Diabetes      Our Model     0.778  0.772  0.776  0.776  0.777  0.775  0.761  0.753   230
+APRI                           Establishe    0.498  0.505  0.513  0.519  0.517  0.532  0.534  0.529   290
+FIB4                           Establishe    0.558  0.565  0.572  0.578  0.587  0.603  0.604  0.602   290
+FAST                           Establishe    0.678  0.695  0.723  0.733  0.736  0.756  0.779  0.789   300
+AGILE3Plus                     Establishe    0.568  0.580  0.591  0.602  0.611  0.637  0.640  0.643   300
+BARD                           Establishe    0.594  0.603  0.619  0.611  0.603  0.619  0.627  0.626   290
+FLI                            Establishe    0.769  0.766  0.765  0.765  0.765  0.754  0.742  0.722   230
+
+--- SENSITIVITY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      66.5   66.2   66.3   69.1   67.1   69.3   67.3   65.8   67.2
+BMI alone                      Our Model      69.5   69.2   69.6   68.8   68.6   68.2   68.8   66.5   68.7
+WC + BMI                       Our Model      70.9   70.6   70.2   70.1   69.8   69.7   68.3   67.1   69.6
+WC + BMI + Age                 Our Model      71.5   71.5   71.5   71.6   71.7   71.2   70.4   69.6   71.1
+WC + BMI + Diabetes            Our Model      70.6   70.5   70.2   70.1   70.2   71.2   70.9   70.3   70.5
+WC + BMI + Age + Diabetes      Our Model      71.7   71.0   71.5   71.6   71.7   72.3   70.9   70.3   71.4
+APRI                           Establishe     49.7   50.8   51.9   53.2   53.4   54.6   53.5   52.9   52.5
+FIB4                           Establishe     53.7   54.4   55.2   55.7   56.6   58.1   58.6   58.6   56.4
+FAST                           Establishe     63.5   65.1   66.3   68.1   68.9   71.0   71.9   73.4   68.5
+AGILE3Plus                     Establishe     54.0   55.1   56.0   57.0   57.5   59.6   60.6   60.5   57.5
+BARD                           Establishe     40.7   42.9   45.8   46.5   46.5   49.6   52.3   53.2   47.2
+FLI                            Establishe     71.4   71.3   70.7   71.0   70.3   69.0   68.7   67.1   69.9
+
+--- SPECIFICITY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      65.7   66.4   67.5   66.3   67.7   66.8   65.3   64.4   66.3
+BMI alone                      Our Model      69.3   69.4   69.7   68.9   68.8   68.1   69.0   66.7   68.7
+WC + BMI                       Our Model      71.0   70.6   70.3   70.4   69.9   69.5   68.5   66.8   69.6
+WC + BMI + Age                 Our Model      71.4   71.5   71.7   71.7   71.6   71.3   70.4   70.1   71.2
+WC + BMI + Diabetes            Our Model      70.5   70.4   70.3   70.3   70.1   71.1   70.8   70.6   70.5
+WC + BMI + Age + Diabetes      Our Model      71.8   71.0   71.5   71.4   71.5   72.3   70.8   70.3   71.3
+APRI                           Establishe     49.6   50.8   51.8   53.0   53.3   54.9   53.5   52.9   52.5
+FIB4                           Establishe     53.9   54.2   55.1   55.7   56.4   58.0   58.4   58.9   56.3
+FAST                           Establishe     63.6   65.0   66.4   68.3   69.0   70.9   72.3   73.5   68.6
+AGILE3Plus                     Establishe     54.0   55.1   56.1   57.0   57.4   59.6   60.4   60.9   57.6
+BARD                           Establishe     79.3   78.6   77.7   76.5   75.5   75.2   74.6   74.1   76.4
+FLI                            Establishe     71.3   71.3   70.7   70.9   70.1   69.0   68.5   67.2   69.9
+
+--- BALANCED ACCURACY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      66.1   66.3   66.9   67.7   67.4   68.1   66.3   65.1   66.7
+BMI alone                      Our Model      69.4   69.3   69.6   68.9   68.7   68.2   68.9   66.6   68.7
+WC + BMI                       Our Model      70.9   70.6   70.3   70.2   69.9   69.6   68.4   66.9   69.6
+WC + BMI + Age                 Our Model      71.5   71.5   71.6   71.7   71.7   71.2   70.4   69.9   71.2
+WC + BMI + Diabetes            Our Model      70.6   70.4   70.3   70.2   70.1   71.1   70.8   70.4   70.5
+WC + BMI + Age + Diabetes      Our Model      71.8   71.0   71.5   71.5   71.6   72.3   70.8   70.3   71.3
+APRI                           Establishe     49.7   50.8   51.8   53.1   53.4   54.8   53.5   52.9   52.5
+FIB4                           Establishe     53.8   54.3   55.1   55.7   56.5   58.0   58.5   58.7   56.3
+FAST                           Establishe     63.5   65.1   66.4   68.2   69.0   71.0   72.1   73.5   68.6
+AGILE3Plus                     Establishe     54.0   55.1   56.1   57.0   57.4   59.6   60.5   60.7   57.5
+BARD                           Establishe     60.0   60.7   61.7   61.5   61.0   62.4   63.4   63.6   61.8
+FLI                            Establishe     71.3   71.3   70.7   70.9   70.2   69.0   68.6   67.2   69.9
+
+--- PPV / POSITIVE PREDICTIVE VALUE (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      53.5   47.3   40.3   34.3   29.3   24.6   18.0   14.0   32.7
+BMI alone                      Our Model      57.4   50.7   43.2   36.1   30.4   25.0   20.1   14.9   34.7
+WC + BMI                       Our Model      59.2   52.3   43.9   37.7   31.6   26.3   19.7   15.1   35.7
+WC + BMI + Age                 Our Model      59.7   53.3   45.5   39.3   33.5   27.9   21.2   17.0   37.2
+WC + BMI + Diabetes            Our Model      58.7   52.0   43.9   37.6   31.8   27.7   21.6   17.3   36.3
+WC + BMI + Age + Diabetes      Our Model      60.2   52.7   45.4   39.0   33.3   28.9   21.6   17.2   37.3
+APRI                           Establishe     36.9   32.1   26.3   22.4   18.4   15.8   11.6    9.0   21.6
+FIB4                           Establishe     40.9   35.2   28.9   24.2   20.4   17.6   13.8   11.2   24.0
+FAST                           Establishe     50.8   45.9   39.5   35.4   30.6   27.6   22.8   19.7   34.1
+AGILE3Plus                     Establishe     41.1   35.9   29.7   25.2   21.1   18.6   14.8   12.0   24.8
+BARD                           Establishe     53.9   47.7   40.5   33.6   27.4   23.8   18.9   15.2   32.6
+FLI                            Establishe     59.8   53.3   44.7   38.6   32.1   26.0   20.1   15.5   36.3
+
+--- NPV / NEGATIVE PREDICTIVE VALUE (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      76.8   81.2   85.8   89.4   91.2   93.3   94.6   95.5   88.5
+BMI alone                      Our Model      79.3   83.2   87.4   89.7   91.7   93.2   95.1   95.8   89.4
+WC + BMI                       Our Model      80.4   84.1   87.7   90.2   92.1   93.6   95.0   95.9   89.9
+WC + BMI + Age                 Our Model      80.8   84.6   88.4   90.8   92.7   94.1   95.5   96.3   90.4
+WC + BMI + Diabetes            Our Model      80.2   84.0   87.7   90.2   92.2   94.1   95.6   96.4   90.0
+WC + BMI + Age + Diabetes      Our Model      81.1   84.3   88.3   90.8   92.7   94.4   95.6   96.4   90.4
+APRI                           Establishe     62.5   69.3   76.5   81.7   85.3   88.7   91.0   92.7   81.0
+FIB4                           Establishe     66.3   72.3   78.8   83.2   86.8   89.9   92.5   94.2   83.0
+FAST                           Establishe     74.6   80.3   85.6   89.4   91.8   94.0   95.8   96.9   88.5
+AGILE3Plus                     Establishe     66.4   72.9   79.4   83.9   87.2   90.5   93.1   94.6   83.5
+BARD                           Establishe     69.3   75.1   81.2   84.9   87.6   90.5   93.2   94.7   84.6
+FLI                            Establishe     80.7   84.4   87.8   90.4   92.2   93.4   95.0   95.8   90.0
+
+============================================================================================================================================
+TABULAR VIEW: FEMALE - All Models Across CAP Thresholds
+============================================================================================================================================
+
+Model                          Type         CAP230 CAP240 CAP250 CAP260 CAP270 CAP280 CAP290 CAP300   Best_CAP
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+--- AUC VALUES ---
+Model                          Type            230    240    250    260    270    280    290    300   Best
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model     0.720  0.730  0.715  0.717  0.713  0.699  0.705  0.681   240
+BMI alone                      Our Model     0.798  0.808  0.801  0.800  0.802  0.795  0.790  0.785   240
+WC + BMI                       Our Model     0.801  0.812  0.803  0.802  0.803  0.795  0.791  0.785   240
+WC + BMI + Age                 Our Model     0.802  0.815  0.805  0.804  0.803  0.795  0.792  0.785   240
+WC + BMI + Diabetes            Our Model     0.801  0.812  0.803  0.802  0.804  0.796  0.794  0.789   240
+WC + BMI + Age + Diabetes      Our Model     0.802  0.814  0.805  0.804  0.804  0.797  0.794  0.789   240
+APRI                           Establishe    0.543  0.546  0.545  0.540  0.556  0.559  0.566  0.571   300
+FIB4                           Establishe    0.520  0.528  0.516  0.507  0.508  0.510  0.521  0.518   240
+FAST                           Establishe    0.745  0.752  0.764  0.770  0.804  0.813  0.826  0.845   300
+AGILE3Plus                     Establishe    0.531  0.537  0.533  0.529  0.542  0.545  0.562  0.566   300
+BARD                           Establishe    0.513  0.519  0.523  0.544  0.551  0.547  0.551  0.554   300
+FLI                            Establishe    0.786  0.793  0.786  0.784  0.782  0.778  0.782  0.781   240
+
+--- SENSITIVITY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      68.2   67.7   68.2   66.8   67.9   67.4   62.2   59.6   66.0
+BMI alone                      Our Model      72.9   74.1   73.0   72.2   72.7   73.7   72.9   72.2   72.9
+WC + BMI                       Our Model      72.3   74.1   73.5   73.1   73.4   72.8   71.8   71.5   72.8
+WC + BMI + Age                 Our Model      72.5   74.4   73.0   73.1   73.8   73.7   72.3   72.8   73.2
+WC + BMI + Diabetes            Our Model      72.3   74.4   73.8   73.1   73.8   73.2   72.3   73.5   73.3
+WC + BMI + Age + Diabetes      Our Model      72.3   74.4   73.0   73.1   73.1   73.7   71.8   72.2   72.9
+APRI                           Establishe     52.7   53.0   53.0   52.6   54.1   54.3   54.5   54.0   53.5
+FIB4                           Establishe     51.4   52.1   51.9   50.9   51.7   51.4   52.2   52.0   51.7
+FAST                           Establishe     68.8   68.3   68.2   70.3   71.9   73.5   76.5   78.7   72.0
+AGILE3Plus                     Establishe     53.0   54.2   53.7   52.7   54.6   54.5   55.9   57.3   54.5
+BARD                           Establishe     28.0   30.4   32.0   35.0   37.6   38.4   40.4   41.7   35.5
+FLI                            Establishe     72.5   73.6   72.1   72.0   70.3   69.4   70.1   69.8   71.2
+
+--- SPECIFICITY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      65.8   68.8   66.1   66.0   64.0   62.3   67.0   65.5   65.7
+BMI alone                      Our Model      72.9   74.2   73.1   72.0   73.1   73.4   72.6   72.5   73.0
+WC + BMI                       Our Model      72.5   74.0   73.7   73.0   73.4   72.8   71.7   72.1   72.9
+WC + BMI + Age                 Our Model      72.5   74.3   73.2   73.3   73.9   73.8   72.4   73.0   73.3
+WC + BMI + Diabetes            Our Model      72.4   73.9   73.7   72.9   73.9   73.1   72.4   73.6   73.2
+WC + BMI + Age + Diabetes      Our Model      72.4   74.2   73.1   73.2   73.3   74.1   71.5   72.5   73.0
+APRI                           Establishe     52.8   53.3   53.1   52.6   54.2   54.5   54.4   53.8   53.6
+FIB4                           Establishe     51.4   52.2   51.9   51.1   51.5   51.4   51.8   51.7   51.6
+FAST                           Establishe     68.6   68.2   68.4   69.8   71.8   72.0   76.6   78.5   71.7
+AGILE3Plus                     Establishe     52.8   54.1   53.6   53.1   54.6   54.1   55.9   57.4   54.5
+BARD                           Establishe     81.1   81.5   81.3   81.5   81.1   80.4   80.1   79.5   80.8
+FLI                            Establishe     72.4   73.8   72.3   72.0   70.4   69.8   70.3   69.5   71.3
+
+--- BALANCED ACCURACY (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      67.0   68.2   67.2   66.4   66.0   64.9   64.6   62.6   65.8
+BMI alone                      Our Model      72.9   74.1   73.0   72.1   72.9   73.5   72.7   72.3   73.0
+WC + BMI                       Our Model      72.4   74.1   73.6   73.0   73.4   72.8   71.8   71.8   72.9
+WC + BMI + Age                 Our Model      72.5   74.3   73.1   73.2   73.9   73.8   72.3   72.9   73.2
+WC + BMI + Diabetes            Our Model      72.4   74.1   73.7   73.0   73.9   73.2   72.3   73.5   73.3
+WC + BMI + Age + Diabetes      Our Model      72.4   74.3   73.0   73.1   73.2   73.9   71.7   72.3   73.0
+APRI                           Establishe     52.8   53.2   53.0   52.6   54.1   54.4   54.5   53.9   53.6
+FIB4                           Establishe     51.4   52.1   51.9   51.0   51.6   51.4   52.0   51.8   51.6
+FAST                           Establishe     68.7   68.2   68.3   70.0   71.8   72.8   76.5   78.6   71.9
+AGILE3Plus                     Establishe     52.9   54.1   53.6   52.9   54.6   54.3   55.9   57.4   54.5
+BARD                           Establishe     54.6   55.9   56.7   58.3   59.4   59.4   60.3   60.6   58.1
+FLI                            Establishe     72.4   73.7   72.2   72.0   70.3   69.6   70.2   69.7   71.3
+
+--- PPV / POSITIVE PREDICTIVE VALUE (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      64.0   58.7   51.0   43.9   36.2   29.7   26.5   20.4   41.3
+BMI alone                      Our Model      70.6   65.3   58.4   50.6   44.9   39.6   33.7   27.9   48.9
+WC + BMI                       Our Model      70.2   65.2   59.2   51.9   45.3   38.7   32.7   27.5   48.8
+WC + BMI + Age                 Our Model      70.2   65.5   58.5   52.1   46.0   40.0   33.3   28.5   49.3
+WC + BMI + Diabetes            Our Model      70.1   65.1   59.2   51.8   46.0   39.1   33.3   29.1   49.2
+WC + BMI + Age + Diabetes      Our Model      70.1   65.3   58.4   52.0   45.1   40.1   32.5   27.9   48.9
+APRI                           Establishe     50.0   42.8   37.0   30.8   26.3   22.0   18.6   14.7   30.3
+FIB4                           Establishe     48.5   41.7   35.8   29.3   24.3   19.9   17.1   13.7   28.8
+FAST                           Establishe     66.1   58.5   52.8   48.1   43.4   38.2   38.3   35.0   47.6
+AGILE3Plus                     Establishe     50.1   43.6   37.4   31.0   26.6   21.9   19.4   16.6   30.8
+BARD                           Establishe     57.0   51.8   47.1   43.0   37.5   31.6   27.9   23.2   39.9
+FLI                            Establishe     70.3   65.0   57.6   50.9   41.8   35.3   31.2   25.6   47.2
+
+--- NPV / NEGATIVE PREDICTIVE VALUE (%) ---
+Model                          Type            230    240    250    260    270    280    290    300   Avg
+--------------------------------------------------------------------------------------------------------------------------------------------
+WC alone                       Our Model      69.8   76.5   80.1   83.3   86.9   89.0   90.3   91.6   83.4
+BMI alone                      Our Model      75.0   81.4   83.9   86.6   89.9   92.2   93.3   94.6   87.1
+WC + BMI                       Our Model      74.6   81.4   84.3   87.2   90.2   91.9   93.0   94.5   87.1
+WC + BMI + Age                 Our Model      74.7   81.6   84.0   87.2   90.4   92.2   93.2   94.8   87.2
+WC + BMI + Diabetes            Our Model      74.5   81.5   84.4   87.2   90.4   92.0   93.2   94.9   87.3
+WC + BMI + Age + Diabetes      Our Model      74.5   81.5   83.9   87.2   90.0   92.2   93.0   94.6   87.1
+APRI                           Establishe     55.6   63.3   68.5   73.5   79.6   83.4   86.2   88.8   74.9
+FIB4                           Establishe     54.2   62.4   67.6   72.3   78.0   81.8   85.1   87.9   73.7
+FAST                           Establishe     71.1   76.6   80.6   85.5   89.5   92.0   94.5   96.1   85.7
+AGILE3Plus                     Establishe     55.7   64.3   69.1   73.8   80.0   83.5   87.0   90.1   75.4
+BARD                           Establishe     55.8   64.1   69.8   75.9   81.2   84.7   87.6   90.2   76.2
+FLI                            Establishe     74.5   80.9   83.3   86.5   88.6   90.6   92.5   93.9   86.3
+
+====================================================================================================
+SUMMARY: BEST PERFORMING MODELS AT EACH CAP THRESHOLD (Overall)
+====================================================================================================
+
+   CAP   Prev% Best Our Model                    AUC Best Established        AUC       Winner
+----------------------------------------------------------------------------------------------------
+   230   41.0% WC + BMI + Age + Diabetes       0.782 FLI                   0.779    Our Model
+   240   34.4% WC + BMI + Age + Diabetes       0.784 FLI                   0.779    Our Model
+   250   28.3% WC + BMI + Age + Diabetes       0.780 FLI                   0.777    Our Model
+   260   23.4% WC + BMI + Age + Diabetes       0.779 FLI                   0.776    Our Model
+   270   19.0% WC + BMI + Age + Diabetes       0.776 FLI                   0.776    Our Model
+   280   15.6% WC + BMI + Age + Diabetes       0.771 FAST                  0.783  Established
+   290   12.4% WC + BMI + Age + Diabetes       0.764 FAST                  0.804  Established
+   300    9.9% WC + BMI + Age + Diabetes       0.753 FAST                  0.818  Established
+
+========================================================================================================================
+COMPREHENSIVE MODEL COMPARISON TABLE (CAP ≥ 248, Overall)
+========================================================================================================================
+
+Model                               Type             AUC   Sens%   Spec%  BalAcc%    PPV%    NPV%     F1
+------------------------------------------------------------------------------------------------------------------------
+WC + BMI + Age + Diabetes           Our Model      0.780   71.4%   71.4%    71.4%   49.7%   86.3%  0.586
+WC + BMI + Age                      Our Model      0.780   71.4%   71.3%    71.3%   49.6%   86.3%  0.585
+FLI                                 Establishe     0.777   71.6%   71.5%    71.6%   50.1%   86.3%  0.589
+WC + BMI + Diabetes                 Our Model      0.773   71.3%   71.2%    71.2%   49.5%   86.2%  0.584
+WC + BMI                            Our Model      0.771   71.4%   71.4%    71.4%   49.6%   86.3%  0.586
+BMI alone                           Our Model      0.765   70.5%   70.4%    70.4%   48.5%   85.8%  0.574
+FAST                                Establishe     0.744   68.9%   68.8%    68.8%   46.7%   84.8%  0.556
+WC alone                            Our Model      0.721   66.5%   66.8%    66.7%   44.2%   83.5%  0.531
+AGILE3Plus                          Establishe     0.585   55.5%   55.6%    55.6%   33.1%   76.0%  0.415
+BARD                                Establishe     0.575   39.6%   79.0%    59.3%   42.6%   76.8%  0.411
+FIB4                                Establishe     0.552   53.8%   53.8%    53.8%   31.5%   74.7%  0.398
+APRI                                Establishe     0.536   53.2%   53.2%    53.2%   31.0%   74.2%  0.392
+
+====================================================================================================
+7.9 THRESHOLD OPTIMIZATION FOR LARGE-SCALE SCREENING
+   Multiple operating points with MINIMUM 50% SENSITIVITY constraint
+   Goal: Identify optimal thresholds for Rule-In (high PPV) screening
+====================================================================================================
+
+================================================================================
+Model: WC + BMI + Age + Diabetes
+================================================================================
+
+--- Male (n=1958, Prevalence=26.0%, AUC=0.771) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10    99.4%     2.8%    26.4%    93.0%    27.9%    0.417 Rule-Out (High Sens)
+      0.15    97.1%    10.1%    27.5%    90.7%    32.7%    0.429 Rule-Out (High Sens)
+      0.20    96.1%    20.0%    29.7%    93.5%    39.8%    0.453 Rule-Out (High Sens)
+      0.25    94.5%    29.2%    31.9%    93.8%    46.2%    0.477 Rule-Out (High Sens)
+      0.30    90.4%    39.1%    34.3%    92.0%    52.4%    0.497 Rule-Out (High Sens)
+      0.35    86.2%    48.0%    36.8%    90.9%    58.0%    0.516 Rule-Out (High Sens)
+      0.40    81.5%    57.1%    40.1%    89.8%    63.5%    0.537 Rule-Out (High Sens)
+      0.45    77.6%    63.5%    42.7%    89.0%    67.2%    0.551 General Screening   
+      0.50    70.7%    71.1%    46.2%    87.4%    71.0%    0.559 Balanced            
+      0.55    64.2%    76.6%    49.1%    85.9%    73.4%    0.557 General Screening   
+      0.60    56.2%    82.3%    52.8%    84.3%    75.5%    0.544 General Screening   
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.60, PPV=52.8%, Sens=56.2%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=70.7%, Spec=71.1%
+  → Best F1 Score:              Threshold=0.50, F1=0.559, PPV=46.2%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=99.4%, NPV=93.0%
+
+--- Female (n=1172, Prevalence=35.2%, AUC=0.806) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10    99.8%     8.3%    37.2%    98.4%    40.5%    0.542 Rule-Out (High Sens)
+      0.15    97.8%    18.7%    39.6%    94.0%    46.6%    0.563 Rule-Out (High Sens)
+      0.20    96.9%    29.5%    42.8%    94.5%    53.2%    0.593 Rule-Out (High Sens)
+      0.25    94.4%    38.5%    45.5%    92.7%    58.2%    0.614 Rule-Out (High Sens)
+      0.30    90.8%    46.1%    47.8%    90.2%    61.9%    0.627 Rule-Out (High Sens)
+      0.35    88.6%    54.3%    51.3%    89.8%    66.4%    0.650 Rule-Out (High Sens)
+      0.40    82.6%    61.4%    53.8%    86.6%    68.9%    0.651 Rule-Out (High Sens)
+      0.45    78.2%    68.5%    57.5%    85.2%    71.9%    0.663 General Screening   
+      0.50    72.9%    73.4%    59.8%    83.3%    73.2%    0.657 Balanced            
+      0.55    66.6%    79.6%    64.0%    81.4%    75.0%    0.652 Moderate Rule-In    
+      0.60    58.8%    83.5%    66.0%    78.9%    74.8%    0.622 Moderate Rule-In    
+      0.65    52.3%    87.2%    69.0%    77.1%    74.9%    0.595 Moderate Rule-In    
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.65, PPV=69.0%, Sens=52.3%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=72.9%, Spec=73.4%
+  → Best F1 Score:              Threshold=0.45, F1=0.663, PPV=57.5%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=99.8%, NPV=98.4%
+
+--- Overall (n=3130, Prevalence=29.5%, AUC=0.778) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10    99.3%     3.8%    30.1%    93.3%    31.9%    0.462 Rule-Out (High Sens)
+      0.15    97.7%    12.2%    31.7%    92.8%    37.4%    0.479 Rule-Out (High Sens)
+      0.20    96.6%    21.7%    34.0%    93.9%    43.8%    0.503 Rule-Out (High Sens)
+      0.25    93.8%    30.7%    36.1%    92.2%    49.3%    0.522 Rule-Out (High Sens)
+      0.30    91.8%    40.3%    39.1%    92.1%    55.5%    0.548 Rule-Out (High Sens)
+      0.35    87.4%    50.2%    42.3%    90.5%    61.2%    0.570 Rule-Out (High Sens)
+      0.40    83.3%    57.9%    45.3%    89.3%    65.4%    0.586 Rule-Out (High Sens)
+      0.45    77.4%    65.2%    48.1%    87.4%    68.8%    0.594 General Screening   
+      0.50    70.9%    71.4%    50.9%    85.5%    71.3%    0.593 Balanced            
+      0.55    63.8%    77.7%    54.4%    83.7%    73.6%    0.587 General Screening   
+      0.60    56.4%    82.9%    58.0%    82.0%    75.1%    0.572 General Screening   
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.60, PPV=58.0%, Sens=56.4%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=70.9%, Spec=71.4%
+  → Best F1 Score:              Threshold=0.45, F1=0.594, PPV=48.1%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=99.3%, NPV=93.3%
+
+================================================================================
+Model: WC + BMI + Diabetes
+================================================================================
+
+--- Male (n=1958, Prevalence=26.0%, AUC=0.754) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10   100.0%     0.0%    26.0%     0.0%    26.0%    0.413 Rule-Out (High Sens)
+      0.15    98.0%     4.2%    26.4%    85.9%    28.6%    0.417 Rule-Out (High Sens)
+      0.20    95.7%    13.3%    27.9%    89.8%    34.7%    0.433 Rule-Out (High Sens)
+      0.25    93.1%    24.3%    30.2%    91.0%    42.2%    0.456 Rule-Out (High Sens)
+      0.30    89.4%    34.9%    32.5%    90.3%    49.0%    0.477 Rule-Out (High Sens)
+      0.35    85.9%    45.1%    35.4%    90.1%    55.7%    0.502 Rule-Out (High Sens)
+      0.40    81.1%    56.0%    39.3%    89.4%    62.6%    0.530 Rule-Out (High Sens)
+      0.45    76.2%    64.1%    42.7%    88.5%    67.3%    0.548 General Screening   
+      0.50    69.4%    70.3%    45.1%    86.7%    70.1%    0.546 Balanced            
+      0.55    63.3%    77.3%    49.5%    85.7%    73.6%    0.555 General Screening   
+      0.60    54.8%    82.4%    52.2%    83.8%    75.2%    0.535 General Screening   
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.60, PPV=52.2%, Sens=54.8%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=69.4%, Spec=70.3%
+  → Best F1 Score:              Threshold=0.55, F1=0.555, PPV=49.5%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=100.0%, NPV=0.0%
+
+--- Female (n=1172, Prevalence=35.2%, AUC=0.804) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10    99.8%     7.2%    36.9%    98.2%    39.8%    0.539 Rule-Out (High Sens)
+      0.15    97.8%    17.3%    39.1%    93.6%    45.6%    0.559 Rule-Out (High Sens)
+      0.20    96.6%    29.4%    42.7%    94.1%    53.1%    0.592 Rule-Out (High Sens)
+      0.25    95.6%    37.0%    45.2%    94.0%    57.7%    0.614 Rule-Out (High Sens)
+      0.30    90.6%    46.0%    47.7%    89.9%    61.7%    0.625 Rule-Out (High Sens)
+      0.35    87.4%    53.9%    50.8%    88.7%    65.7%    0.642 Rule-Out (High Sens)
+      0.40    83.5%    61.4%    54.1%    87.3%    69.2%    0.657 Rule-Out (High Sens)
+      0.45    78.9%    68.2%    57.5%    85.6%    72.0%    0.665 General Screening   
+      0.50    72.9%    74.2%    60.6%    83.4%    73.7%    0.662 Balanced            
+      0.55    66.6%    78.5%    62.8%    81.2%    74.3%    0.646 Moderate Rule-In    
+      0.60    57.9%    83.5%    65.7%    78.5%    74.5%    0.615 Moderate Rule-In    
+      0.65    50.4%    87.6%    68.9%    76.4%    74.5%    0.582 Moderate Rule-In    
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.65, PPV=68.9%, Sens=50.4%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=72.9%, Spec=74.2%
+  → Best F1 Score:              Threshold=0.45, F1=0.665, PPV=57.5%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=99.8%, NPV=98.2%
+
+--- Overall (n=3130, Prevalence=29.5%, AUC=0.771) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10    99.5%     1.2%    29.6%    84.4%    30.2%    0.456 Rule-Out (High Sens)
+      0.15    97.9%     7.9%    30.7%    90.2%    34.4%    0.468 Rule-Out (High Sens)
+      0.20    96.5%    18.3%    33.0%    92.7%    41.4%    0.492 Rule-Out (High Sens)
+      0.25    93.3%    28.8%    35.4%    91.1%    47.8%    0.513 Rule-Out (High Sens)
+      0.30    90.7%    38.5%    38.1%    90.8%    53.8%    0.536 Rule-Out (High Sens)
+      0.35    86.7%    49.0%    41.5%    89.8%    60.1%    0.561 Rule-Out (High Sens)
+      0.40    82.4%    57.2%    44.6%    88.6%    64.6%    0.579 Rule-Out (High Sens)
+      0.45    77.0%    65.0%    47.9%    87.1%    68.6%    0.591 General Screening   
+      0.50    70.0%    72.0%    51.1%    85.2%    71.4%    0.590 Balanced            
+      0.55    63.7%    77.4%    54.1%    83.6%    73.4%    0.585 General Screening   
+      0.60    55.3%    82.6%    57.0%    81.6%    74.5%    0.561 General Screening   
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.60, PPV=57.0%, Sens=55.3%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=70.0%, Spec=72.0%
+  → Best F1 Score:              Threshold=0.45, F1=0.591, PPV=47.9%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=99.5%, NPV=84.4%
+
+================================================================================
+Model: WC + BMI
+================================================================================
+
+--- Male (n=1958, Prevalence=26.0%, AUC=0.752) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10   100.0%     0.0%    26.0%     0.0%    26.0%    0.413 Rule-Out (High Sens)
+      0.15    98.6%     3.2%    26.4%    86.8%    28.0%    0.416 Rule-Out (High Sens)
+      0.20    96.3%    12.6%    27.9%    90.5%    34.3%    0.432 Rule-Out (High Sens)
+      0.25    93.9%    23.9%    30.3%    91.8%    42.1%    0.458 Rule-Out (High Sens)
+      0.30    89.6%    34.2%    32.4%    90.3%    48.6%    0.475 Rule-Out (High Sens)
+      0.35    85.7%    44.9%    35.3%    89.9%    55.5%    0.500 Rule-Out (High Sens)
+      0.40    81.9%    54.2%    38.6%    89.5%    61.4%    0.525 Rule-Out (High Sens)
+      0.45    75.6%    63.8%    42.4%    88.2%    66.9%    0.543 General Screening   
+      0.50    69.4%    70.9%    45.5%    86.8%    70.5%    0.550 Balanced            
+      0.55    62.5%    76.5%    48.3%    85.3%    72.8%    0.545 General Screening   
+      0.60    53.4%    82.8%    52.2%    83.5%    75.2%    0.528 General Screening   
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.60, PPV=52.2%, Sens=53.4%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=69.4%, Spec=70.9%
+  → Best F1 Score:              Threshold=0.50, F1=0.550, PPV=45.5%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=100.0%, NPV=0.0%
+
+--- Female (n=1172, Prevalence=35.2%, AUC=0.804) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10    99.8%     7.2%    36.9%    98.2%    39.8%    0.539 Rule-Out (High Sens)
+      0.15    97.8%    17.5%    39.2%    93.7%    45.8%    0.560 Rule-Out (High Sens)
+      0.20    96.6%    29.1%    42.6%    94.0%    52.9%    0.591 Rule-Out (High Sens)
+      0.25    95.6%    36.8%    45.1%    93.9%    57.5%    0.613 Rule-Out (High Sens)
+      0.30    90.6%    46.1%    47.8%    90.0%    61.8%    0.625 Rule-Out (High Sens)
+      0.35    87.4%    53.9%    50.8%    88.7%    65.7%    0.642 Rule-Out (High Sens)
+      0.40    83.5%    61.4%    54.1%    87.3%    69.2%    0.657 Rule-Out (High Sens)
+      0.45    78.9%    68.1%    57.4%    85.6%    71.9%    0.665 General Screening   
+      0.50    72.9%    74.0%    60.4%    83.4%    73.6%    0.661 Balanced            
+      0.55    66.3%    78.5%    62.7%    81.1%    74.2%    0.645 Moderate Rule-In    
+      0.60    57.4%    83.4%    65.3%    78.2%    74.2%    0.611 Moderate Rule-In    
+      0.65    50.4%    87.6%    68.9%    76.4%    74.5%    0.582 Moderate Rule-In    
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.65, PPV=68.9%, Sens=50.4%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=72.9%, Spec=74.0%
+  → Best F1 Score:              Threshold=0.45, F1=0.665, PPV=57.4%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=99.8%, NPV=98.2%
+
+--- Overall (n=3130, Prevalence=29.5%, AUC=0.770) ---
+
+ Threshold    Sens%    Spec%     PPV%     NPV%     Acc%       F1 Use Case            
+-----------------------------------------------------------------------------------------------
+      0.10    99.5%     1.1%    29.6%    83.3%    30.1%    0.456 Rule-Out (High Sens)
+      0.15    97.9%     8.2%    30.8%    90.5%    34.6%    0.469 Rule-Out (High Sens)
+      0.20    96.6%    18.6%    33.1%    93.0%    41.6%    0.494 Rule-Out (High Sens)
+      0.25    93.0%    28.7%    35.3%    90.7%    47.6%    0.511 Rule-Out (High Sens)
+      0.30    91.0%    38.3%    38.1%    91.1%    53.8%    0.537 Rule-Out (High Sens)
+      0.35    87.5%    48.5%    41.5%    90.3%    60.0%    0.563 Rule-Out (High Sens)
+      0.40    83.1%    57.1%    44.7%    89.0%    64.8%    0.581 Rule-Out (High Sens)
+      0.45    77.3%    65.0%    48.0%    87.3%    68.6%    0.592 General Screening   
+      0.50    70.5%    71.9%    51.2%    85.4%    71.5%    0.593 Balanced            
+      0.55    63.6%    77.4%    54.0%    83.6%    73.3%    0.584 General Screening   
+      0.60    54.6%    82.9%    57.1%    81.4%    74.5%    0.558 General Screening   
+
+  KEY OPERATING POINTS (Sensitivity ≥ 50%):
+  → Best Rule-In (Max PPV):     Threshold=0.60, PPV=57.1%, Sens=54.6%
+  → Balanced (Sens ≈ Spec):     Threshold=0.50, Sens=70.5%, Spec=71.9%
+  → Best F1 Score:              Threshold=0.50, F1=0.593, PPV=51.2%
+  → Best Rule-Out (Max Sens):   Threshold=0.10, Sens=99.5%, NPV=83.3%
+
+
+Saved: Threshold_Optimization_Screening.csv
+
+====================================================================================================
+7.10 SCREENING RECOMMENDATION SUMMARY
+====================================================================================================
+
+------------------------------------------------------------
+RECOMMENDED THRESHOLDS FOR LARGE-SCALE FLD SCREENING
+------------------------------------------------------------
+
+Model: WC + BMI + Age + Diabetes (Overall Population)
+AUC: 0.778
+Prevalence: 29.5%
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    RECOMMENDED OPERATING POINTS                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 1. RULE-IN SCREENING (High PPV for confirmation)                           │
+│    Threshold: 0.60 | Sens: 56.4% | Spec: 82.9% | PPV: 58.0% | NPV: 82.0%  │
+│    → Use when: Confirmatory testing is expensive/invasive                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2. BALANCED SCREENING (Equal Sens/Spec)                                    │
+│    Threshold: 0.50 | Sens: 70.9% | Spec: 71.4% | PPV: 50.9% | NPV: 85.5%  │
+│    → Use when: Equal importance to detecting cases and avoiding FPs        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 3. OPTIMAL F1 (Best precision-recall balance)                              │
+│    Threshold: 0.45 | Sens: 77.4% | Spec: 65.2% | PPV: 48.1% | NPV: 87.4%  │
+│    → Use when: Balancing detection rate with positive predictive value     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  NOTE: All operating points maintain Sensitivity ≥ 50% to ensure
+        at least half of true FLD cases are detected.
+
+------------------------------------------------------------
+COMPARISON: OUR MODEL vs ESTABLISHED SCORES AT RULE-IN THRESHOLD
+------------------------------------------------------------
+
+Model/Score                          Threshold    Sens%    Spec%     PPV%     NPV%
+--------------------------------------------------------------------------------
+WC+BMI+Age+Diabetes (Ours)                0.60    56.4%    82.9%    58.0%    82.0%
+APRI                                      0.34    54.3%    51.8%    32.0%    73.1%
+FIB4                                      1.24    50.0%    57.1%    32.7%    73.2%
+FAST                                      0.19    54.7%    80.3%    53.7%    80.9%
+AGILE3Plus                                0.00    53.4%    58.5%    35.0%    75.0%
+BARD                                      1.00    90.9%     8.4%    29.3%    68.8%
+FLI                                      35.58    57.4%    81.5%    56.6%    82.0%
+
+====================================================================================================
+8. GENERATING VISUALIZATIONS
+====================================================================================================
+  Saved: Diabetes_Stratification_FLD.png
+  Saved: Sex_Specific_Model_Comparison.png
+  Saved: Reverse_Nomogram_Visualization.png
+  Saved: Comprehensive_Model_Heatmap.png
+  Saved: ROC_Curves_Key_Models.png
+  Saved: Performance_Incremental_CAP.png
+  Saved: Odds_Ratio_Forest_Plot.png
+  Saved: All_Combinations_FLD.png
+  Saved: Gender_Stratified_Combinations.png
+  Saved: Score_Comparison_Chart.png
+  Saved: Performance_Across_CAP_Thresholds.png
+  Saved: ROC_Comparison_Scores.png
+  Saved: Threshold_Optimization_Screening.png
+
+====================================================================================================
+9. ANALYSIS SUMMARY
+====================================================================================================
+
+--------------------------------------------------
+A. DIABETES STRATIFICATION FINDINGS
+--------------------------------------------------
+
+1. Highest FLD Risk:
+   Diabetes+ + High WC + High BMI: 59.8%
+   OR = 11.35 (95% CI: 8.34-15.46)
+
+2. Effect Modification by Diabetes:
+   High WC without Diabetes: 40.0% FLD
+   High WC with Diabetes: 49.7% FLD
+   Absolute difference: +9.7%
+
+--------------------------------------------------
+B. SEX-SPECIFIC MODEL FINDINGS
+--------------------------------------------------
+
+Male:
+   Best Model: Age + WC + BMI
+   AUC: 0.770 (95% CI: 0.745-0.794)
+
+Female:
+   Best Model: Age + WC + BMI
+   AUC: 0.806 (95% CI: 0.781-0.830)
+
+--------------------------------------------------
+C. DIAGNOSTIC PERFORMANCE
+--------------------------------------------------
+
+Best predictor combinations for FLD screening:
+   Male: WC+BMI at WC≥90 (AUC=0.752)
+   Female: WC+BMI at WC≥80 (AUC=0.804)
+
+====================================================================================================
+ANALYSIS COMPLETE
+====================================================================================================
+
+All results saved to: /Users/aditya/Documents/imeld_data/comprehensive_fld_analysis/
+
+Generated files:
+  CSV Files:
+    - Diabetes_Stratification_Analysis.csv
+    - All_Combinations_Analysis.csv
+    - Sex_Specific_Prediction_Scores.csv
+    - Reverse_Nomogram_WC_to_CAP.csv
+    - Diagnostic_Performance_Comparison.csv
+    - Comprehensive_Model_Performance_CAP248.csv
+    - Model_Performance_Incremental_CAP.csv
+    - Score_Comparison_CAP248.csv
+    - Score_Performance_CAP_Range.csv
+    - Threshold_Optimization_Screening.csv  [Multiple Operating Points]
+    - WC_Cutoff_FLD_Analysis.csv  [WC>80, WC>90 FLD chances]
+    - FLD_Fibrosis_Prevalence.csv  [FLD/Fibrosis prevalence by gender]
+    - BMI_FLD_Fibrosis_Analysis.csv  [BMI-based FLD/Fibrosis predictions]
+    - Risk_Factor_Combinations.csv  [Risk factor combinations analysis]
+    - Fibroscan_Predictability.csv  [Fibroscan need prediction]
+    - Combined_FLD_Fibrosis_Prediction.csv  [FLD+Fibrosis combined prediction]
+    - CART_Weighted_Analysis.csv  [CART model by depth]
+    - CART_Feature_Combinations.csv  [CART by feature combinations]
+
+  Visualizations:
+    - Diabetes_Stratification_FLD.png
+    - All_Combinations_FLD.png
+    - Gender_Stratified_Combinations.png
+    - Sex_Specific_Model_Comparison.png
+    - Reverse_Nomogram_Visualization.png
+    - Comprehensive_Model_Heatmap.png
+    - ROC_Curves_Key_Models.png
+    - Performance_Incremental_CAP.png
+    - Odds_Ratio_Forest_Plot.png
+    - Score_Comparison_Chart.png
+    - Performance_Across_CAP_Thresholds.png
+    - ROC_Comparison_Scores.png
+    - Threshold_Optimization_Screening.png  [Screening Trade-offs]
+    - CART_Decision_Trees.png  [CART decision tree visualizations]
+
+  Reports:
+    - FLD_Analysis_Report.txt  [Complete analysis output - text format]
+    - FLD_Analysis_Report.pdf  [Complete analysis output - PDF format]
+
+--------------------------------------------------
+ESTABLISHED SCORES CALCULATED:
+--------------------------------------------------
+  ✓ APRI
+  ✓ FIB4
+  ✓ FAST
+  ✓ AGILE3Plus
+  ✓ BARD
+  ✓ FLI
+
+--------------------------------------------------
+KEY COMPARISONS:
+--------------------------------------------------
+  1. Our models (WC, BMI, WC+BMI, etc.) vs Established scores
+  2. Custom model (BMI+WC+Gender+AST+ALT+PLT) performance
+  3. Performance across CAP thresholds 230-300 dB/m
+
+====================================================================================================
+GENERATING REPORT FILES
+====================================================================================================
+
+</pre>
+</body>
+</html>
